@@ -1,0 +1,10 @@
+import { drizzle } from "drizzle-orm/planetscale-serverless";
+import { connect } from "@planetscale/database";
+
+const databaseConnection = connect({
+  host: process.env.DATABASE_HOST,
+  username: process.env.DATABASE_USERNAME,
+  password: process.env.DATABASE_PASSWORD,
+});
+
+export const database = drizzle(databaseConnection);
