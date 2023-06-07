@@ -1,6 +1,7 @@
-import MenuComponent, { MenuListProps } from "@/components/menu/MenuComponent";
 import "./globals.css";
 import { Inter } from "next/font/google";
+import { MenuListProps } from "@/components/menu/menuItem";
+import MenuLayout from "@/components/menu/menuLayout";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -35,7 +36,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <MenuComponent menuList={menuList}></MenuComponent>
+        <MenuLayout menuList={menuList}></MenuLayout>
         {children}
       </body>
     </html>
