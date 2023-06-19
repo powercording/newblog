@@ -31,17 +31,16 @@ class LoginHandler {
     return validEmail;
   };
 
-  findUser = (formData: FormData) => {
-    const username = formData.get("id") as string;
-    if (!this.validateLogin(username)) {
+  findUser = (email: string) => {
+    if (!this.validateLogin(email)) {
       return null;
     }
 
-    return database.select().from(user).where(eq(user.email, username));
+    return database.select().from(user).where(eq(user.email, email));
   };
 
-  login = async (formData: FormData) => {
-    const user = await this.findUser(formData);
+  login = async (email: string) => {
+    const user = await this.findUser(email);
     if (!user?.length) {
       return "유저 없음";
     }

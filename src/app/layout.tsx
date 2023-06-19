@@ -1,6 +1,7 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { MenuListProps } from "@/components/menu/menuItem";
+import { cookies } from "next/dist/client/components/headers";
 import MenuLayout from "@/components/menu/menuLayout";
 
 const inter = Inter({ subsets: ["latin"] });

@@ -1,19 +1,26 @@
-import { withIronSessionApiRoute } from "iron-session/next";
+import { getIronSession, createResponse, IronSession } from "iron-session";
 
-declare module "iron-session" {
-  interface Session {
-    user: {
-      id: string;
-      name: string;
-    };
-  }
-}
+type SessionData = {
+  user?: {
+    id: string;
+    name: string;
+  };
+};
 
-const cookieConfig = {
+type GetSession = (
+  req: Request,
+  res: Response
+) => Promise<IronSession<SessionData>>;
+
+export const cookieConfig = {
   cookieName: "session",
   password: `${process.env.NEXT_PUBLIC_SESSION_PWD}`,
 };
 
-export function sessionHandler(fn: any) {
-  return withIronSessionApiRoute(fn, cookieConfig);
-}
+export const getSession: GetSession = (req, res) => {
+  const session = getIronSession<SessionData>(req, res, cookieConfig);
+
+  return session;
+};
+
+export { createResponse };
