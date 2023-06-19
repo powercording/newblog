@@ -5,26 +5,7 @@ import loginHandler from "../handler/LoginHandler";
 export default function JoinPage() {
   const handleSubmit = async (formData: FormData) => {
     "use server";
-    const data = {
-      email: formData.get("email"),
-    };
-
-    const user = await fetch("http://localhost:3000/api/auth", {
-      method: "POST",
-      body: JSON.stringify(data),
-      cache: "no-cache",
-    });
-
-    const result = await user.json();
-
-    if (result.state === "empty") {
-      console.log("가입 가능");
-      
-    }
-
-    if (result.state === "exist") {
-      console.log("가입 불가능");
-    }
+    await loginHandler.login(formData.get("email") as string);
   };
 
   return (

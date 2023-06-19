@@ -1,6 +1,7 @@
 import { database } from "@/database/databseClient";
 import { user } from "@/lib/UserSchema/schema";
 import { eq } from "drizzle-orm";
+import { redirect } from "next/navigation";
 
 class LoginHandler {
   private static instance: LoginHandler;
@@ -32,19 +33,30 @@ class LoginHandler {
   };
 
   findUser = (email: string) => {
-    if (!this.validateLogin(email)) {
-      return null;
-    }
-
     return database.select().from(user).where(eq(user.email, email));
   };
 
   login = async (email: string) => {
-    const user = await this.findUser(email);
-    if (!user?.length) {
-      return "유저 없음";
+    if (!this.validateLogin(email)) {
+      // 올바르지 않은 접근 ("이메일 오류,등 일때 유저에게 피드백 주는 방법 생각하기")
+      redirect("/join");
     }
-    return user;
+
+    const user = await this.findUser(email);
+
+    if (Array.isArray(user) && user.length === 0) {
+      // 올바르지 않은 접근 ("이메일 오류,등 일때 유저에게 피드백 주는 방법 생각하기")
+      redirect("/join");
+    }
+
+    const response = await fetch("http://localhost:3000/api/auth", {
+      method: "POST",
+      body: JSON.stringify({ user }),
+      cache: "no-cache",
+    });
+    const result = await response.json();
+
+    if (result.state === "ok") redirect("/");
   };
 }
 
