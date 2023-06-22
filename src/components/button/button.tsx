@@ -14,8 +14,9 @@ export default function Button<C extends React.ElementType>({
   return (
     <Component
       {...props}
-      style={style}
+      type={props.type ?? "button"}
       className="bg-gray-300 p-2 rounded-md text-gray-400 peer-valid:text-black peer-valid:bg-gray-100 peer-valid:hover:bg-white"
+      style={style}
     />
   );
 }

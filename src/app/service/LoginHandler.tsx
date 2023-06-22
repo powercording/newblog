@@ -2,7 +2,6 @@ import { database } from "@/database/databseClient";
 import { user } from "@/lib/UserSchema/schema";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
-import { NextResponse } from "next/server";
 
 class LoginHandler {
   private static instance: LoginHandler;
@@ -39,13 +38,11 @@ class LoginHandler {
   };
 
   findUser = async (email: string) => {
-    console.log(email);
-    const user1 = await database
+    const existUser = await database
       .select()
       .from(user)
       .where(eq(user.email, email));
-    console.log(user1);
-    return user1;
+    return existUser;
   };
 
   login = async (email: string) => {

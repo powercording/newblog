@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { database } from "@/database/databseClient";
 import { post } from "@/lib/PostSchema/schema";
 import ArticleLayout from "@/components/article/articleLayout";

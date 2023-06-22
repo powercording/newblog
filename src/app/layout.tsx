@@ -1,8 +1,9 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { MenuListProps } from "@/components/menu/menuItem";
-import { cookies } from "next/dist/client/components/headers";
 import MenuLayout from "@/components/menu/menuLayout";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/nextAuth/options";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -33,7 +34,9 @@ interface RootLayoutProps {
   children: React.ReactNode;
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default async function RootLayout({ children }: RootLayoutProps) {
+  const session = await getServerSession(authOptions);
+
   return (
     <html lang="en">
       <body className={inter.className}>
