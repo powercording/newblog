@@ -1,4 +1,5 @@
 import { database } from "@/database/databseClient";
+import { token } from "@/lib/TokenSchema/schema";
 import { user } from "@/lib/UserSchema/schema";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
@@ -45,27 +46,25 @@ class LoginHandler {
     return existUser;
   };
 
-  login = async (email: string) => {
+  login = async (email: string, password: string) => {
+    // 올바르지 않은 접근 ("이메일 오류,등 일때 유저에게 피드백 주는 방법 생각하기")
     if (!this.validateLogin(email)) {
-      // 올바르지 않은 접근 ("이메일 오류,등 일때 유저에게 피드백 주는 방법 생각하기")
-      redirect("/join");
+      redirect("/");
+    }
+    const isValid = await this.findUser(email);
+
+    if (Array.isArray(isValid) && isValid.length === 0) {
+      redirect("/");
     }
 
-    const user = await this.findUser(email);
+    const loginToken = await database
+      .select()
+      .from(token)
+      .where(eq(token.payload, password));
 
-    if (Array.isArray(user) && user.length === 0) {
-      // 올바르지 않은 접근 ("이메일 오류,등 일때 유저에게 피드백 주는 방법 생각하기")
-      redirect("/join");
-    }
+    // const result = await response.json();
 
-    const response = await fetch("http://localhost:3000/api/auth", {
-      method: "POST",
-      body: JSON.stringify({ user }),
-      cache: "no-cache",
-    });
-    const result = await response.json();
-
-    if (result.state === "ok") redirect("/");
+    // if (result.state === "ok") redirect("/");
   };
 }
 

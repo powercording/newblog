@@ -6,6 +6,7 @@ interface InputProps extends Omit<React.ComponentProps<"input">, "style"> {
 
 export default function Input({ ...props }: InputProps) {
   const { style } = props;
+
   const inputStyle = style || {};
   return (
     <input

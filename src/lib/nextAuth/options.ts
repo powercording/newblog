@@ -12,22 +12,28 @@ type MyUser = {} & User;
 const emailCredential: CredentialInput = {
   label: "Email",
   type: "text",
-  placeholder: "jsmith",
+  placeholder: "email",
+};
+const passwordCredential: CredentialInput = {
+  label: "Password",
+  type: "password",
+  placeholder: "Password",
 };
 
 const authorize: CredentialsConfig["authorize"] = async (credentials) => {
-  if (credentials) {
-    const { email } = credentials;
-    const [find] = await loginHandler.findUser(email);
+  if (!credentials) return Promise.resolve(null);
 
-    const user: MyUser = {
-      id: `${find.id}`,
-      email: find.email,
-      name: find.name,
-    };
-    return user;
-  }
-  return Promise.resolve(null);
+  const { email } = credentials;
+
+  const [find] = await loginHandler.findUser(email);
+  if (!find) return Promise.resolve(null);
+
+  const user: MyUser = {
+    id: `${find.id}`,
+    email: find.email,
+    name: find.name,
+  };
+  return user;
 };
 
 export const authOptions: NextAuthOptions = {
@@ -39,6 +45,7 @@ export const authOptions: NextAuthOptions = {
       name: "Credentials",
       credentials: {
         email: emailCredential,
+        password: passwordCredential,
       },
       authorize,
     }),

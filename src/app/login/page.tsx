@@ -1,22 +1,48 @@
 "use client";
 
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import { signIn } from "next-auth/react";
+import { pickUser } from "@/actions/user";
 import Input from "@/components/input/input";
 import Button from "@/components/button/button";
 
+type LoginOkProp = {
+  email: string;
+  password: string;
+  isEmailOk: true;
+};
+
+type LoginFailProp = {
+  email: string;
+  password: string;
+  isEmailOk: false;
+};
+
+type LoginProp = LoginOkProp | LoginFailProp;
+
 export default function LoginPage() {
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isEmailOk, setIsEmailOk] = useState(false);
 
-  const onEmailChange: React.EventHandler<ChangeEvent<HTMLInputElement>> = (
-    e
-  ) => {
-    setEmail(e.target.value);
+  const getUser = async () => {
+    const res = await pickUser(email);
+    if (res.ok) {
+      setIsEmailOk(true);
+    }
+
+    if (!res.ok) {
+      setIsEmailOk(false);
+      setEmail(res.message);
+    }
   };
 
   const onLogin = async () => {
-    const user = await signIn("credentials", { email, callbackUrl: "/" });
-    console.log(user);
+    const user = await signIn("credentials", {
+      email,
+      password,
+      callbackUrl: "/",
+    });
   };
 
   return (
@@ -27,17 +53,20 @@ export default function LoginPage() {
           name="email"
           placeholder="이메일"
           value={email}
-          onChange={onEmailChange}
+          onChange={(e) => setEmail(e.target.value)}
           required
+          disabled={isEmailOk ? true : false}
         />
-        {/* <Input
+        <Input
           type="password"
           name="password"
           placeholder="비밀번호"
+          onChange={(e) => setPassword(e.target.value)}
           required
-        /> */}
-        <Button type="submit" onClick={onLogin}>
-          가입하기
+          disabled={isEmailOk ? false : true}
+        />
+        <Button type="submit" onClick={isEmailOk ? onLogin : getUser}>
+          {isEmailOk ? "로그인" : "임시 비밀번호 받기"}
         </Button>
       </div>
     </main>
