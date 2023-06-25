@@ -24,20 +24,12 @@ class LoginHandler {
 
   // todo: /temp/ 부분 유효한 정규식으로 수정할것.
   validateEmail = (email: string) => {
-    const validEmail = /^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(
-      email
-    );
-    return validEmail;
+    return /^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(email);
   };
 
   validatePassword = (password: string) => {
     if (Number.isNaN(+password)) return false;
     return Number.isInteger(+password);
-  };
-
-  createToken = async (email: string) => {
-    ///
-    return { ok: true, message: "token" };
   };
 
   findUser = async (email: string) => {
@@ -58,6 +50,10 @@ class LoginHandler {
       .from(token)
       .where(eq(token.payload, password));
     return existToken[0];
+  };
+
+  createToken = async (payLoad: number, userId: number) => {
+    database.insert(token).values({ payload: `${payLoad}`, userId: userId });
   };
 
   login = async (email: string, password: string) => {

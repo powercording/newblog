@@ -28,6 +28,11 @@ const menuList: MenuListProps[] = [
     href: "/join",
     key: "join",
   },
+  {
+    locationName: "Ai-Chat",
+    href: "/ai",
+    key: "ai",
+  },
 ];
 
 interface RootLayoutProps {
@@ -37,10 +42,17 @@ interface RootLayoutProps {
 export default async function RootLayout({ children }: RootLayoutProps) {
   const session = await getServerSession(authOptions);
 
+  const currentMenu = [...menuList];
+  const logedInMenu = currentMenu.filter((menu) => {
+    return menu.key !== "login" && menu.key !== "join" && session?.user?.email;
+  });
+
+  const menuProps = logedInMenu.length > 0 ? logedInMenu : currentMenu;
+
   return (
     <html lang="en">
       <body className={inter.className}>
-        <MenuLayout menuList={menuList}></MenuLayout>
+        <MenuLayout menuList={menuProps}></MenuLayout>
         {children}
       </body>
     </html>
