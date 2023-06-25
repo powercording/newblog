@@ -2,7 +2,6 @@
 
 import * as Nav from "@radix-ui/react-navigation-menu";
 import MenuItem, { MenuListProps } from "./menuItem";
-import { cookies } from "next/dist/client/components/headers";
 
 interface MenuComponentProps {
   menuList: MenuListProps[];

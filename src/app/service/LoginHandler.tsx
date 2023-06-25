@@ -46,6 +46,12 @@ class LoginHandler {
     return existUser;
   };
 
+  createToken = async (payLoad: number, userId: number) => {
+    const loginToken = await database
+      .insert(token)
+      .values({ payload: `${payLoad}`, userId: userId });
+  };
+
   login = async (email: string, password: string) => {
     // 올바르지 않은 접근 ("이메일 오류,등 일때 유저에게 피드백 주는 방법 생각하기")
     if (!this.validateLogin(email)) {
