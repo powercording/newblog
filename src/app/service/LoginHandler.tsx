@@ -2,7 +2,6 @@ import { database } from "@/database/databseClient";
 import { token } from "@/lib/TokenSchema/schema";
 import { user } from "@/lib/UserSchema/schema";
 import { eq } from "drizzle-orm";
-import { redirect } from "next/navigation";
 
 class LoginHandler {
   private static instance: LoginHandler;
@@ -23,50 +22,56 @@ class LoginHandler {
     return this.instance;
   }
 
-  getUser = async () => {
-    // const result = await fetch("http://localhost:3000/api/user");
-    // const response = await result.json();
-    // return response;
-  };
-
   // todo: /temp/ 부분 유효한 정규식으로 수정할것.
-  validateLogin = (username: string) => {
+  validateEmail = (email: string) => {
     const validEmail = /^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(
-      username
+      email
     );
-    // const validPassword = /temp/.test(password);
     return validEmail;
   };
 
+  validatePassword = (password: string) => {
+    if (Number.isNaN(+password)) return false;
+    return Number.isInteger(+password);
+  };
+
+  createToken = async (email: string) => {
+    ///
+    return { ok: true, message: "token" };
+  };
+
   findUser = async (email: string) => {
+    if (!this.validateEmail(email)) return Promise.resolve(null);
+
     const existUser = await database
       .select()
       .from(user)
       .where(eq(user.email, email));
-    return existUser;
+    return existUser[0];
   };
 
-  login = async (email: string, password: string) => {
-    // 올바르지 않은 접근 ("이메일 오류,등 일때 유저에게 피드백 주는 방법 생각하기")
-    if (!this.validateLogin(email)) {
-      redirect("/");
-    }
-    const isValid = await this.findUser(email);
+  findToken = async (password: string) => {
+    if (!this.validatePassword(password)) return Promise.resolve(null);
 
-    if (Array.isArray(isValid) && isValid.length === 0) {
-      redirect("/");
-    }
-
-    const loginToken = await database
+    const existToken = await database
       .select()
       .from(token)
       .where(eq(token.payload, password));
+    return existToken[0];
+  };
 
-    // const result = await response.json();
+  login = async (email: string, password: string) => {
+    const [user, loginToken] = await Promise.all([
+      this.findUser(email),
+      this.findToken(password),
+    ]);
 
-    // if (result.state === "ok") redirect("/");
+    if (!user || !loginToken) return Promise.resolve(null);
+    if (user.id !== loginToken.userId) return Promise.resolve(null);
+
+    await database.delete(token).where(eq(token.userId, user.id));
+    return user;
   };
 }
-
 const loginHandler = LoginHandler.getInstance();
 export default loginHandler;

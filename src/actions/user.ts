@@ -3,9 +3,10 @@
 import loginHandler from "@/app/service/LoginHandler";
 
 export const pickUser = async (email: string) => {
-  const [find] = await loginHandler.findUser(email);
+  const find = await loginHandler.findUser(email);
 
   if (find) {
+    loginHandler.createToken(email);
     return { ok: true, data: find, status: 200, message: "success" };
   }
 

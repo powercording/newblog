@@ -21,19 +21,20 @@ const passwordCredential: CredentialInput = {
 };
 
 const authorize: CredentialsConfig["authorize"] = async (credentials) => {
+  // null should be changed to proper value
   if (!credentials) return Promise.resolve(null);
 
-  const { email } = credentials;
+  const { email, password } = credentials;
+  const user = await loginHandler.login(email, password);
 
-  const [find] = await loginHandler.findUser(email);
-  if (!find) return Promise.resolve(null);
+  if (!user) return Promise.resolve(null);
 
-  const user: MyUser = {
-    id: `${find.id}`,
-    email: find.email,
-    name: find.name,
+  const loginUser: MyUser = {
+    id: `${user.id}`,
+    email,
+    name: user.name,
   };
-  return user;
+  return loginUser;
 };
 
 export const authOptions: NextAuthOptions = {

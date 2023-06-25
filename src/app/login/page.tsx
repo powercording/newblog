@@ -38,7 +38,7 @@ export default function LoginPage() {
   };
 
   const onLogin = async () => {
-    const user = await signIn("credentials", {
+    await signIn("credentials", {
       email,
       password,
       callbackUrl: "/",
