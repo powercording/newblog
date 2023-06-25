@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { pickUser, createToken } from "@/actions/user";
+import { pickUser, issueToken } from "@/actions/user";
 import Input from "@/components/input/input";
 import Button from "@/components/button/button";
 
@@ -29,7 +29,7 @@ export default function LoginForm() {
     const user = await pickUser(email);
     if (user.ok) {
       setIsEmailOk(true);
-      createToken(email, user);
+      issueToken(email, user);
     }
 
     if (!user.ok) {
@@ -59,9 +59,10 @@ export default function LoginForm() {
           disabled={isEmailOk ? true : false}
         />
         <Input
-          type="password"
+          type="text"
           name="password"
           placeholder="비밀번호"
+          value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
           disabled={isEmailOk ? false : true}

@@ -19,6 +19,11 @@ const menuList: MenuListProps[] = [
     key: "home",
   },
   {
+    locationName: "Ai-Chat",
+    href: "/ai",
+    key: "ai",
+  },
+  {
     locationName: "Login",
     href: "/login",
     key: "login",
@@ -27,11 +32,6 @@ const menuList: MenuListProps[] = [
     locationName: "Join",
     href: "/join",
     key: "join",
-  },
-  {
-    locationName: "Ai-Chat",
-    href: "/ai",
-    key: "ai",
   },
 ];
 

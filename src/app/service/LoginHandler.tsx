@@ -1,7 +1,9 @@
 import { database } from "@/database/databseClient";
 import { token } from "@/lib/TokenSchema/schema";
 import { user } from "@/lib/UserSchema/schema";
+import smtpTransport from "@/lib/nodemailer/email";
 import { eq } from "drizzle-orm";
+import Mail from "nodemailer/lib/mailer";
 
 class LoginHandler {
   private static instance: LoginHandler;
@@ -45,15 +47,27 @@ class LoginHandler {
   findToken = async (password: string) => {
     if (!this.validatePassword(password)) return Promise.resolve(null);
 
-    const existToken = await database
-      .select()
-      .from(token)
-      .where(eq(token.payload, password));
+    const existToken = await database.select().from(token);
+    // .where(eq(token.payload, password));
+    console.log(existToken);
     return existToken[0];
   };
 
   createToken = async (payLoad: number, userId: number) => {
-    database.insert(token).values({ payload: `${payLoad}`, userId: userId });
+    await database
+      .insert(token)
+      .values({ payload: `${payLoad}`, userId: userId });
+  };
+
+  sendEmail = async (email: string, payload: number) => {
+    const mailOptions: Mail["options"] = {
+      from: process.env.NEXT_PUBLIC_EMAIL_ID,
+      to: email,
+      subject: "블로그가입 인증번호 입니다.",
+      text: `인증번호: ${payload}`,
+      html: `<h1>인증번호: ${payload}</h1>`,
+    };
+    smtpTransport.sendMail(mailOptions);
   };
 
   login = async (email: string, password: string) => {

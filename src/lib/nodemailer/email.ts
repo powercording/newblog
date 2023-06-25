@@ -6,8 +6,8 @@ const senderOptions: SMTPTransport.Options = {
   host: "smtp.naver.com",
   port: 587,
   auth: {
-    user: process.env.NEXT_PUBLIC_EMAIL,
-    pass: process.env.NEXT_PUBLIC_EMAIL_PASSWORD,
+    user: `${process.env.NEXT_PUBLIC_EMAIL_ID}`,
+    pass: `${process.env.NEXT_PUBLIC_EMAIL_PASS}`,
   },
   tls: {
     rejectUnauthorized: false,

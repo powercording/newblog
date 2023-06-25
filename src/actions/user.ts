@@ -24,7 +24,7 @@ type NoUser = {
   message: string;
 };
 
-type User = ExistUser | NoUser;
+export type User = ExistUser | NoUser;
 
 import loginHandler from "@/app/service/LoginHandler";
 
@@ -43,9 +43,10 @@ export const pickUser = async (email: string): Promise<User> => {
   };
 };
 
-export const createToken = async (email: string, user: User) => {
+export const issueToken = async (email: string, user: User) => {
   if (user.ok === false) return null;
 
   const payLoad = Math.floor(100000 + Math.random() * 900000);
   loginHandler.createToken(payLoad, user.data.id);
+  loginHandler.sendEmail(email, payLoad);
 };
