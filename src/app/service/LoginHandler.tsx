@@ -63,7 +63,7 @@ class LoginHandler {
     const mailOptions: Mail["options"] = {
       from: process.env.NEXT_PUBLIC_EMAIL_ID,
       to: email,
-      subject: "블로그가입 인증번호 입니다.",
+      subject: "마이블로그 인증번호 입니다.",
       text: `인증번호: ${payload}`,
       html: `<h1>인증번호: ${payload}</h1>`,
     };
