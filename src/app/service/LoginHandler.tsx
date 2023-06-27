@@ -47,8 +47,11 @@ class LoginHandler {
   findToken = async (password: string) => {
     if (!this.validatePassword(password)) return Promise.resolve(null);
 
-    const existToken = await database.select().from(token);
-    // .where(eq(token.payload, password));
+    const existToken = await database
+      .select()
+      .from(token)
+      .where(eq(token.payload, password));
+
     console.log(existToken);
     return existToken[0];
   };
