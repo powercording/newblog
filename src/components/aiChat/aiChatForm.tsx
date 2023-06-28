@@ -28,9 +28,15 @@ export default function AiChatForm() {
   return (
     <>
       <section className="self-center w-full lg:w-[600px] py-14">
-        {messages.map((message) => {
-          return <AiChatRow key={message.id} message={message} />;
-        })}
+        {messages.length ? (
+          messages.map((message) => {
+            return <AiChatRow key={message.id} message={message} />;
+          })
+        ) : (
+          <p className="text-center text-gray-500 mt-5 text-sm">
+            인공지능과 채팅을 해보세요!
+          </p>
+        )}
       </section>
 
       <form

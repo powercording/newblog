@@ -24,6 +24,11 @@ const menuList: MenuListProps[] = [
     key: "ai",
   },
   {
+    locationName: "Add Post",
+    href: "/addPost",
+    key: "addPost",
+  },
+  {
     locationName: "Login",
     href: "/login",
     key: "login",
