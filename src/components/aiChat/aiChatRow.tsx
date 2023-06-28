@@ -13,14 +13,14 @@ export default function AiChatRow({ message }: AiChatRowProps) {
     <div
       className={`flex justify-between gap-5 shadow-md rounded-md px-5 py-4`}
     >
-      <div className="text-center">
+      <div className="text-center basis-1/12">
         {role === "user" ? (
           <FiUser size={"1.5rem"} />
         ) : (
           <VscOctoface size={"1.5rem"} />
         )}
       </div>
-      <div className="w-full self-start">
+      <div className="w-full self-start basis-11/12">
         <p className={`${role === "user" ? "" : "text-gray-500"}`}>{content}</p>
         {createdAt && (
           <p className="text-end text-xs text-gray-400">
