@@ -1,13 +1,11 @@
 "use client";
 
-"use client";
-
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeSanitize from "rehype-sanitize";
 import rehypeRaw from "rehype-raw";
-import rehypePrism from "rehype-prism-plus";
+import rehypePrism from "rehype-prism-plus/.";
 
 export default function AddPost() {
   const [markdown, setMarkdown] = useState("");
@@ -21,6 +19,7 @@ export default function AddPost() {
         className="p-10 w-full prose"
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypePrism, rehypeSanitize, rehypeRaw]}
+        skipHtml={false}
       >
         {markdown}
       </ReactMarkdown>
