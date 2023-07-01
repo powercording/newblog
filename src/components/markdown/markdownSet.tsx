@@ -3,25 +3,30 @@
 import { useState } from "react";
 import MarkdownViewer, { MarkdownViewerType } from "./markdownViewer";
 import MarkdownEditor from "./markdownEditor";
+import { deleteMarkdown, insertMarkdown } from "@/actions/post";
+import { revalidatePath } from "next/cache";
 
 type MarkdownSet = {
-  title?: string;
   renderType: "edit" | "create";
 } & MarkdownViewerType;
 
-export default function MarkdownSet({
-  markdown,
-  title,
-  renderType,
-}: MarkdownSet) {
-  const [markdownContent, setMarkdownContent] = useState(markdown ?? "");
-  const [markdonwTitle, setMarkdownTitle] = useState(title ?? "");
+export default function MarkdownSet({ markdown, renderType }: MarkdownSet) {
+  const [markdownContent, setMarkdownContent] = useState(
+    markdown?.content ?? ""
+  );
+  const [markdonwTitle, setMarkdownTitle] = useState(markdown?.title ?? "");
 
-  const handleMarkdownRegister = () => {};
+  const handleMarkdownRegister = async () => {
+    insertMarkdown({ content: markdownContent, title: markdonwTitle });
+    revalidatePath("/");
+  };
 
   const handleMarkdownUpdate = () => {};
 
-  const hnadleMarkdownDelete = () => {};
+  const hnadleMarkdownDelete = async () => {
+    await deleteMarkdown(markdown?.id ?? 0);
+    revalidatePath("/");
+  };
 
   const handleMarkdownAutosave = () => {};
 
@@ -31,10 +36,10 @@ export default function MarkdownSet({
         markdown={markdownContent}
         setMarkdown={setMarkdownContent}
       />
-      <MarkdownViewer markdown={markdownContent} />
+      <MarkdownViewer markdown={markdown} />
       <div className="flex border fixed h-16 bottom-0 inset-x-0 lg:inset-x-[300px] bg-white rounded-t-lg drop-shadow-md shadow-md">
         <input
-          className="w-full h-full px-4 font-bold focus:outline-none bg-gray-50 text-black"
+          className="w-full h-full px-6 font-bold focus:outline-none bg-gray-50 text-black"
           type="text"
           value={markdonwTitle ?? ""}
           onChange={(e) => setMarkdownTitle(e.target.value)}

@@ -26,10 +26,10 @@ type NoUser = {
 
 export type User = ExistUser | NoUser;
 
-import loginHandler from "@/app/service/LoginHandler";
+import loginService from "@/app/service/LoginService";
 
 export const pickUser = async (email: string): Promise<User> => {
-  const find = await loginHandler.findUser(email);
+  const find = await loginService.findUser(email);
 
   if (find) {
     return { ok: true, data: find, status: 200, message: "success" };
@@ -47,6 +47,6 @@ export const issueToken = async (email: string, user: User) => {
   if (user.ok === false) return null;
 
   const payLoad = Math.floor(100000 + Math.random() * 900000);
-  loginHandler.createToken(payLoad, user.data.id);
-  loginHandler.sendEmail(email, payLoad);
+  loginService.createToken(payLoad, user.data.id);
+  loginService.sendEmail(email, payLoad);
 };

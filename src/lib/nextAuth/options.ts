@@ -1,4 +1,4 @@
-import loginHandler from "@/app/service/LoginHandler";
+import loginService from "@/app/service/LoginService";
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import type { User } from "next-auth/src";
@@ -25,7 +25,7 @@ const authorize: CredentialsConfig["authorize"] = async (credentials) => {
   if (!credentials) return Promise.resolve(null);
 
   const { email, password } = credentials;
-  const user = await loginHandler.login(email, password);
+  const user = await loginService.login(email, password);
 
   if (!user) return Promise.resolve(null);
 

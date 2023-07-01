@@ -5,21 +5,21 @@ import smtpTransport from "@/lib/nodemailer/email";
 import { eq } from "drizzle-orm";
 import Mail from "nodemailer/lib/mailer";
 
-class LoginHandler {
-  private static instance: LoginHandler;
+class LoginService {
+  private static instance: LoginService;
 
   constructor() {
-    if (LoginHandler.instance) {
+    if (LoginService.instance) {
       throw new Error(
-        "Error: Instantiation failed: Use LoginHandler.getInstance() instead of new."
+        "Error: Instantiation failed: Use LoginService.getInstance() instead of new."
       );
     }
-    LoginHandler.instance = this;
+    LoginService.instance = this;
   }
 
-  public static getInstance(): LoginHandler {
-    if (!LoginHandler.instance) {
-      LoginHandler.instance = new LoginHandler();
+  public static getInstance(): LoginService {
+    if (!LoginService.instance) {
+      LoginService.instance = new LoginService();
     }
     return this.instance;
   }
@@ -86,5 +86,5 @@ class LoginHandler {
     return user;
   };
 }
-const loginHandler = LoginHandler.getInstance();
-export default loginHandler;
+const loginService = LoginService.getInstance();
+export default loginService;

@@ -1,5 +1,7 @@
 "use client";
 
+import { post } from "@/lib/PostSchema/schema";
+import { InferModel } from "drizzle-orm";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/cjs/styles/prism";
@@ -7,7 +9,7 @@ import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 
 export type MarkdownViewerType = {
-  markdown?: string;
+  markdown?: InferModel<typeof post>;
 };
 
 export default function MarkdownViewer({ markdown }: MarkdownViewerType) {
@@ -36,7 +38,7 @@ export default function MarkdownViewer({ markdown }: MarkdownViewerType) {
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeRaw]}
       >
-        {markdown ?? ""}
+        {markdown?.content ?? ""}
       </ReactMarkdown>
     </section>
   );

@@ -1,6 +1,6 @@
 import Button from "@/components/button/button";
 import Input from "@/components/input/input";
-import loginHandler from "@/app/service/LoginHandler";
+import loginHandler from "@/app/service/LoginService";
 
 export default function JoinForm() {
   const handleSubmit = async (formData: FormData) => {

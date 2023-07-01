@@ -3,6 +3,7 @@ import { database } from "@/database/databseClient";
 import { post } from "@/lib/PostSchema/schema";
 import { eq } from "drizzle-orm";
 import Link from "next/link";
+import { deleteMarkdown } from "@/actions/post";
 
 export type Params = {
   params: {
@@ -19,7 +20,7 @@ export default async function Post({ params: { id } }: Params) {
   return (
     <main className="grid lg:grid-cols-2 w-full justify-items-center">
       <div>
-        <MarkdownViewer markdown={markdownPost[0].content} />
+        <MarkdownViewer markdown={markdownPost[0]} />
         <Link href={`post/edit/${id}`}>
           <button>수정</button>
         </Link>
