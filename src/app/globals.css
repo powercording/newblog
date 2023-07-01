@@ -25,3 +25,15 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+.editor {
+  scrollbar-gutter: stable;
+}
+
+.markdown {
+  width: calc((100vw / 2) - 160px);
+  height: 100%;
+  text-overflow: ellipsis;
+  overflow-y: auto;
+  word-break: break-word;
+  scrollbar-gutter: stable;
+}

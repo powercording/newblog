@@ -11,35 +11,39 @@ export default function AddPost() {
   const [markdown, setMarkdown] = useState("");
 
   return (
-    <main className="grid lg:grid-cols-2 max-h-screen">
+    <main className="grid lg:grid-cols-2 justify-items-stretch max-h-screen">
       <textarea
         onChange={(e) => setMarkdown(e.target.value)}
-        className="h-screen w-full text-black p-10 lg:p-20"
+        className="editor h-screen w-full text-black p-20"
+        placeholder="Write your markdown here..."
       ></textarea>
-      <ReactMarkdown
-        className="p-10 lg:p-20 w-full prose"
-        components={{
-          code({ node, inline, className, children, ...props }) {
-            const match = /language-(\w+)/.exec(className || "");
-            return !inline && match ? (
-              <SyntaxHighlighter
-                {...props}
-                style={vscDarkPlus}
-                language={match[1] ?? "jsx"}
-                PreTag="div"
-              >
-                {String(children).replace(/\n$/, "")}
-              </SyntaxHighlighter>
-            ) : (
-              <code {...props}>{children}</code>
-            );
-          },
-        }}
-        remarkPlugins={[remarkGfm]}
-        rehypePlugins={[rehypeRaw]}
-      >
-        {markdown}
-      </ReactMarkdown>
+      <section className="p-20 prose max-h-screen">
+        <ReactMarkdown
+          className="markdown"
+          components={{
+            code({ inline, className, children, ...props }) {
+              const match = /language-(\w+)/.exec(className || "");
+              return !inline && match ? (
+                <SyntaxHighlighter
+                  className="w-full"
+                  {...props}
+                  style={vscDarkPlus}
+                  language={match[1] ?? "jsx"}
+                  PreTag="div"
+                >
+                  {String(children).replace(/\n$/, "")}
+                </SyntaxHighlighter>
+              ) : (
+                <code {...props}>{children}</code>
+              );
+            },
+          }}
+          remarkPlugins={[remarkGfm]}
+          rehypePlugins={[rehypeRaw]}
+        >
+          {markdown}
+        </ReactMarkdown>
+      </section>
     </main>
   );
 }
