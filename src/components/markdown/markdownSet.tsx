@@ -1,14 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import MarkdownViewer, { MarkdownViewerType } from "./markdownViewer";
+import MarkdownViewer from "./markdownViewer";
 import MarkdownEditor from "./markdownEditor";
-import { deleteMarkdown, insertMarkdown } from "@/actions/post";
+import {
+  deleteMarkdown,
+  insertMarkdown,
+  // updateMarkdown,
+} from "@/actions/post";
 import { revalidatePath } from "next/cache";
+import { InferModel } from "drizzle-orm";
+import { post } from "@/lib/PostSchema/schema";
 
 type MarkdownSet = {
   renderType: "edit" | "create";
-} & MarkdownViewerType;
+  markdown?: InferModel<typeof post>;
+};
 
 export default function MarkdownSet({ markdown, renderType }: MarkdownSet) {
   const [markdownContent, setMarkdownContent] = useState(
@@ -18,14 +25,21 @@ export default function MarkdownSet({ markdown, renderType }: MarkdownSet) {
 
   const handleMarkdownRegister = async () => {
     insertMarkdown({ content: markdownContent, title: markdonwTitle });
-    revalidatePath("/");
   };
 
-  const handleMarkdownUpdate = () => {};
+  const handleMarkdownUpdate = async () => {
+    const result = await fetch("/api/post", {
+      method: "PATCH",
+      body: JSON.stringify({
+        markdown: markdownContent,
+        title: markdonwTitle,
+        id: markdown?.id ?? null,
+      }),
+    });
+  };
 
   const hnadleMarkdownDelete = async () => {
     await deleteMarkdown(markdown?.id ?? 0);
-    revalidatePath("/");
   };
 
   const handleMarkdownAutosave = () => {};
@@ -36,7 +50,7 @@ export default function MarkdownSet({ markdown, renderType }: MarkdownSet) {
         markdown={markdownContent}
         setMarkdown={setMarkdownContent}
       />
-      <MarkdownViewer markdown={markdown} />
+      <MarkdownViewer markdown={markdownContent} />
       <div className="flex border fixed h-16 bottom-0 inset-x-0 lg:inset-x-[300px] bg-white rounded-t-lg drop-shadow-md shadow-md">
         <input
           className="w-full h-full px-6 font-bold focus:outline-none bg-gray-50 text-black"

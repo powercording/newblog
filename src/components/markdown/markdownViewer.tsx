@@ -9,7 +9,7 @@ import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 
 export type MarkdownViewerType = {
-  markdown?: InferModel<typeof post>;
+  markdown?: string
 };
 
 export default function MarkdownViewer({ markdown }: MarkdownViewerType) {
@@ -38,7 +38,7 @@ export default function MarkdownViewer({ markdown }: MarkdownViewerType) {
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeRaw]}
       >
-        {markdown?.content ?? ""}
+        {markdown ?? ""}
       </ReactMarkdown>
     </section>
   );

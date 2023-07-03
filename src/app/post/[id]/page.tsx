@@ -20,7 +20,7 @@ export default async function Post({ params: { id } }: Params) {
   return (
     <main className="grid lg:grid-cols-2 w-full justify-items-center">
       <div>
-        <MarkdownViewer markdown={markdownPost[0]} />
+        <MarkdownViewer markdown={markdownPost[0].content} />
         <Link href={`post/edit/${id}`}>
           <button>수정</button>
         </Link>
