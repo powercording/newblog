@@ -17,7 +17,7 @@ export default async function Post({ params: { id } }: Params) {
     .where(eq(post.id, Number(id)));
 
   return (
-    <main className="grid lg:grid-cols-2 w-full justify-items-center">
+    <main className="grid lg:grid-cols-2 w-full justify-items-center h-screen">
       <div>
         <MarkdownViewer markdown={markdownPost[0].content} />
         <Link href={`post/edit/${id}`}>

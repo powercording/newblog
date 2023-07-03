@@ -3,7 +3,6 @@
 type MarkdownEditor = {
   setMarkdown: (markdown: string) => void;
   markdown: string;
-  // setTitle: (title: string) => void;
 };
 
 export default function MarkdownEditor({

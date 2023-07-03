@@ -1,16 +1,11 @@
 import { InferModel, eq } from "drizzle-orm";
 import { post } from "@/lib/PostSchema/schema";
 import { database } from "@/database/databseClient";
-import { a } from "drizzle-orm/column.d-66a08b85";
 
 type Markdown = {
   content: string;
   title: string;
 } & Omit<Partial<InferModel<typeof post>>, "content" | "title">;
-
-export type MarkdownModel = Markdown & {
-  userName: string;
-};
 
 class PostService {
   private static instance: PostService;
@@ -31,16 +26,18 @@ class PostService {
     return this.instance;
   }
 
-  registerPost = async (markdownModel: MarkdownModel) => {
-    const result = await database.insert(post).values(markdownModel);
-    console.log(result);
+  registerPost = async (markdownModel: Markdown) => {
+    await fetch("/api/post", {
+      method: "POST",
+      body: JSON.stringify(markdownModel),
+    });
   };
 
   deleteMarkdown = async (id: number) => {
-    await fetch("/api/post", {
+    console.log("d");
+    await fetch(`/api/post/${id}`, {
       method: "DELETE",
     });
-    await database.delete(post).where(eq(post.id, id));
   };
 
   updateMarkdown = async (markdownModel: Markdown) => {

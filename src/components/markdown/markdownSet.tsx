@@ -3,7 +3,6 @@
 import { useState } from "react";
 import MarkdownViewer from "./markdownViewer";
 import MarkdownEditor from "./markdownEditor";
-import { deleteMarkdown, insertMarkdown } from "@/actions/post";
 import { InferModel } from "drizzle-orm";
 import { post } from "@/lib/PostSchema/schema";
 import postService from "@/app/service/PostService";
@@ -13,18 +12,32 @@ type MarkdownSet = {
   markdown?: InferModel<typeof post>;
 };
 
-export default function MarkdownSet({ markdown, renderType }: MarkdownSet) {
+const emptyMarkdown: InferModel<typeof post> = {
+  id: 0,
+  content: "",
+  title: "",
+  userName: "",
+  createdAt: "",
+};
+
+export default function MarkdownSet({
+  markdown = emptyMarkdown,
+  renderType,
+}: MarkdownSet) {
   const [markdownContent, setMarkdownContent] = useState(
     markdown?.content ?? ""
   );
   const [markdonwTitle, setMarkdownTitle] = useState(markdown?.title ?? "");
 
   const handleMarkdownRegister = async () => {
-    insertMarkdown({ content: markdownContent, title: markdonwTitle });
+    await postService.registerPost({
+      content: markdownContent,
+      title: markdonwTitle,
+    });
   };
 
   const handleMarkdownUpdate = async () => {
-    postService.updateMarkdown({
+    await postService.updateMarkdown({
       ...markdown,
       content: markdownContent,
       title: markdonwTitle,
@@ -32,7 +45,7 @@ export default function MarkdownSet({ markdown, renderType }: MarkdownSet) {
   };
 
   const hnadleMarkdownDelete = async () => {
-    await deleteMarkdown(markdown?.id ?? 0);
+    await postService.deleteMarkdown(markdown.id);
   };
 
   const handleMarkdownAutosave = () => {};
