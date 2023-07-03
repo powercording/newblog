@@ -1,11 +1,12 @@
 import { InferModel, eq } from "drizzle-orm";
 import { post } from "@/lib/PostSchema/schema";
 import { database } from "@/database/databseClient";
+import { a } from "drizzle-orm/column.d-66a08b85";
 
 type Markdown = {
   content: string;
   title: string;
-} & Omit<Partial<InferModel<typeof post>>, "content" | "title" | "userName">;
+} & Omit<Partial<InferModel<typeof post>>, "content" | "title">;
 
 export type MarkdownModel = Markdown & {
   userName: string;
@@ -36,7 +37,17 @@ class PostService {
   };
 
   deleteMarkdown = async (id: number) => {
+    await fetch("/api/post", {
+      method: "DELETE",
+    });
     await database.delete(post).where(eq(post.id, id));
+  };
+
+  updateMarkdown = async (markdownModel: Markdown) => {
+    await fetch("/api/post", {
+      method: "PATCH",
+      body: JSON.stringify(markdownModel),
+    });
   };
 }
 

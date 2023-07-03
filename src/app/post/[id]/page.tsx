@@ -3,7 +3,6 @@ import { database } from "@/database/databseClient";
 import { post } from "@/lib/PostSchema/schema";
 import { eq } from "drizzle-orm";
 import Link from "next/link";
-import { deleteMarkdown } from "@/actions/post";
 
 export type Params = {
   params: {

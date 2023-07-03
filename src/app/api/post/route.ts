@@ -3,20 +3,26 @@ import { post } from "@/lib/PostSchema/schema";
 import { authOptions } from "@/lib/nextAuth/options";
 import { eq } from "drizzle-orm";
 import { getServerSession } from "next-auth";
-import { getSession } from "next-auth/react";
 import { NextResponse } from "next/server";
 
 export async function PATCH(req: Request) {
   const session = await getServerSession(authOptions);
-  if (!session) return null;
+  const { content, title, id, userName } = await req.json();
+  console.log(content);
 
-  console.log("2");
-  const { markdown, title, id } = await req.json();
-  console.log("!");
+  if (!session) {
+    console.log("no session");
+    return NextResponse.json({ ok: false, status: 401 });
+  }
+
+  if (session.user?.email !== userName) {
+    console.log("user match failed");
+    return NextResponse.json({ ok: false, status: 401 });
+  }
 
   await database
     .update(post)
-    .set({ content: markdown, title })
+    .set({ content: content, title })
     .where(eq(post.id, id));
 
   return NextResponse.json({ ok: true });

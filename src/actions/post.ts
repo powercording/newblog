@@ -3,9 +3,6 @@
 import { InferModel } from "drizzle-orm";
 import { post } from "@/lib/PostSchema/schema";
 import postService from "@/app/service/PostService";
-import { getSession } from "next-auth/react";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/nextAuth/options";
 
 type Markdown = {
   content: string;

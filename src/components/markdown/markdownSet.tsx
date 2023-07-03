@@ -3,14 +3,10 @@
 import { useState } from "react";
 import MarkdownViewer from "./markdownViewer";
 import MarkdownEditor from "./markdownEditor";
-import {
-  deleteMarkdown,
-  insertMarkdown,
-  // updateMarkdown,
-} from "@/actions/post";
-import { revalidatePath } from "next/cache";
+import { deleteMarkdown, insertMarkdown } from "@/actions/post";
 import { InferModel } from "drizzle-orm";
 import { post } from "@/lib/PostSchema/schema";
+import postService from "@/app/service/PostService";
 
 type MarkdownSet = {
   renderType: "edit" | "create";
@@ -28,13 +24,10 @@ export default function MarkdownSet({ markdown, renderType }: MarkdownSet) {
   };
 
   const handleMarkdownUpdate = async () => {
-    const result = await fetch("/api/post", {
-      method: "PATCH",
-      body: JSON.stringify({
-        markdown: markdownContent,
-        title: markdonwTitle,
-        id: markdown?.id ?? null,
-      }),
+    postService.updateMarkdown({
+      ...markdown,
+      content: markdownContent,
+      title: markdonwTitle,
     });
   };
 
