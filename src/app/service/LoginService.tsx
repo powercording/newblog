@@ -52,7 +52,6 @@ class LoginService {
       .from(token)
       .where(eq(token.payload, password));
 
-    console.log(existToken);
     return existToken[0];
   };
 

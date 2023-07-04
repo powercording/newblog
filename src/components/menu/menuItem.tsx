@@ -2,7 +2,7 @@ import * as Nav from "@radix-ui/react-navigation-menu";
 
 export type MenuListProps = {
   locationName: string;
-  href: string;
+  href: string | undefined;
 } & React.ComponentProps<typeof Nav.Link>;
 
 export default function MenuItem({ locationName, href }: MenuListProps) {

@@ -23,16 +23,24 @@ const menuList: MenuListProps[] = [
     href: "/ai",
     key: "ai",
   },
+];
+
+const withLogInMenu: MenuListProps[] = [
   {
     locationName: "Add Post",
     href: "/addPost",
     key: "addPost",
   },
+  { locationName: "Logout", href: undefined, key: "logout" },
+];
+
+const withLogOutMenu: MenuListProps[] = [
   {
     locationName: "Login",
     href: "/login",
     key: "login",
   },
+
   {
     locationName: "Join",
     href: "/join",
@@ -47,17 +55,20 @@ interface RootLayoutProps {
 export default async function RootLayout({ children }: RootLayoutProps) {
   const session = await getServerSession(authOptions);
 
-  const currentMenu = [...menuList];
-  const logedInMenu = currentMenu.filter((menu) => {
-    return menu.key !== "login" && menu.key !== "join" && session?.user?.email;
-  });
+  let currentMenu: MenuListProps[] = menuList;
 
-  const menuProps = logedInMenu.length > 0 ? logedInMenu : currentMenu;
+  if (session) {
+    currentMenu = [...menuList, ...withLogInMenu];
+  }
+
+  if (!session) {
+    currentMenu = [...menuList, ...withLogOutMenu];
+  }
 
   return (
     <html lang="en">
       <body className={`${inter.className} min-h-screen h-auto`}>
-        <MenuLayout menuList={menuProps}></MenuLayout>
+        <MenuLayout menuList={currentMenu} session={session}></MenuLayout>
         {children}
       </body>
     </html>

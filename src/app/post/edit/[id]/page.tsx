@@ -3,12 +3,19 @@ import { Params } from "../../[id]/page";
 import { post } from "@/lib/PostSchema/schema";
 import { eq } from "drizzle-orm";
 import MarkdownSet from "@/components/markdown/markdownSet";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/nextAuth/options";
 
 export default async function PostEdit({ params: { id } }: Params) {
+  const session = await getServerSession(authOptions);
   const markdown = await database
     .select()
     .from(post)
     .where(eq(post.id, Number(id)));
+
+  if (session?.user?.name !== markdown[0].userName) {
+    window.location.href = "/";
+  }
 
   return <MarkdownSet markdown={markdown[0]} renderType="edit" />;
 }

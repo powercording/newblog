@@ -47,7 +47,7 @@ export async function PATCH(req: Request) {
     .set({ content: content, title })
     .where(eq(post.id, id));
 
-  return NextResponse.json({ ok: true });
+  return NextResponse.redirect(`http://localhost:3000/post/${id}`);
 }
 
 export async function POST(req: Request) {
@@ -58,9 +58,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, status: 404 });
   }
 
-  await database
+  const result = await database
     .insert(post)
     .values({ content, title, userName: session.user?.email! });
 
-  return NextResponse.json({ ok: true });
+  return NextResponse.redirect(`http://localhost:3000/post/${result.insertId}`);
 }

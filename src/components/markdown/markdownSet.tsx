@@ -6,6 +6,7 @@ import MarkdownEditor from "./markdownEditor";
 import { InferModel } from "drizzle-orm";
 import { post } from "@/lib/PostSchema/schema";
 import postService from "@/app/service/PostService";
+import { getSession } from "next-auth/react";
 
 type MarkdownSet = {
   renderType: "edit" | "create";
@@ -28,9 +29,10 @@ export default function MarkdownSet({
     markdown?.content ?? ""
   );
   const [markdonwTitle, setMarkdownTitle] = useState(markdown?.title ?? "");
+  const {} = getSession();
 
   const handleMarkdownRegister = async () => {
-    await postService.registerPost({
+    await postService.insertPost({
       content: markdownContent,
       title: markdonwTitle,
     });
@@ -45,6 +47,8 @@ export default function MarkdownSet({
   };
 
   const hnadleMarkdownDelete = async () => {
+    const isDelete = confirm("정말 삭제하시겠습니까?");
+    if (!isDelete) return;
     await postService.deleteMarkdown(markdown.id);
   };
 
