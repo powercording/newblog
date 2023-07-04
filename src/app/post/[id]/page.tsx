@@ -17,14 +17,13 @@ export default async function Post({ params: { id } }: Params) {
     .where(eq(post.id, Number(id)));
 
   return (
-    <main className="grid lg:grid-cols-2 w-full justify-items-center h-screen">
-      <div>
-        <MarkdownViewer markdown={markdownPost[0].content} />
-        <Link href={`post/edit/${id}`}>
-          <button>수정</button>
-        </Link>
-      </div>
-      <aside className="p-20">댓글란</aside>
+    <main className="grid lg:grid-cols-2 w-[80%] justify-items-center mx-auto">
+      <MarkdownViewer markdown={markdownPost[0].content} />
+      <Link href={`post/edit/${id}`} className="absolute top-20">
+        <button>수정</button>
+      </Link>
+
+      <aside className="p-20 w-full">댓글란</aside>
     </main>
   );
 }

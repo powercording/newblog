@@ -56,7 +56,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
 
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className} min-h-screen h-auto`}>
         <MenuLayout menuList={menuProps}></MenuLayout>
         {children}
       </body>

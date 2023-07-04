@@ -10,7 +10,7 @@ interface MenuComponentProps {
 
 export default function MenuLayout({ menuList, children }: MenuComponentProps) {
   return (
-    <Nav.Root className="fixed top-0 bg-zinc-900 opacity-70 w-full text-white">
+    <Nav.Root className="fixed top-0 bg-zinc-900 w-full text-white z-50">
       <Nav.List className="flex p-3 gap-3">
         {menuList.map((menu) => {
           return (

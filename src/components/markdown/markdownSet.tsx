@@ -51,7 +51,7 @@ export default function MarkdownSet({
   const handleMarkdownAutosave = () => {};
 
   return (
-    <main className="grid lg:grid-cols-2 justify-items-stretch max-h-screen">
+    <main className="grid lg:grid-cols-2 min-h-screen h-auto w-[80%] mx-auto">
       <MarkdownEditor
         markdown={markdownContent}
         setMarkdown={setMarkdownContent}

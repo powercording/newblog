@@ -19,21 +19,17 @@
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+    to bottom,
+    rgb(var(--background-end-rgb)),
+    rgb(var(--background-start-rgb))
+  );
 }
+
 .editor {
   scrollbar-gutter: stable;
 }
 
 .markdown {
-  width: calc((100vw / 2) - 160px);
-  height: 100%;
-  text-overflow: ellipsis;
-  overflow-y: auto;
-  word-break: break-word;
   scrollbar-gutter: stable;
 }
+/* width: calc((100vw / 2) - 160px); */
