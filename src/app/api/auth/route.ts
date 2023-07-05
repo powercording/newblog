@@ -1,9 +1,13 @@
 import { database } from "@/database/databseClient";
 import { user } from "@/lib/UserSchema/schema";
-import { eq } from "drizzle-orm";
+import { InferModel, eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+type ResponsType = InferModel<typeof user>;
+
+export async function POST(
+  req: Request
+): Promise<NextResponse<ResponsType | undefined>> {
   const { email } = await req.json();
 
   const existUser = await database
@@ -13,3 +17,5 @@ export async function POST(req: Request) {
 
   return NextResponse.json(existUser[0]);
 }
+
+export type GetUserReturnType = ReturnType<typeof POST>;

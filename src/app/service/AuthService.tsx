@@ -4,6 +4,7 @@ import { user as User } from "@/lib/UserSchema/schema";
 import { InferModel, eq } from "drizzle-orm";
 
 type UserModel = InferModel<typeof User>;
+type TokenModel = InferModel<typeof token>;
 
 class AuthService {
   private static instance: AuthService;
@@ -25,11 +26,11 @@ class AuthService {
   }
 
   // todo: /temp/ 부분 유효한 정규식으로 수정할것.
-  validateEmail = (email: string) => {
+  validateEmail = (email: string): boolean => {
     return /^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(email);
   };
 
-  validatePassword = (password: string) => {
+  validatePassword = (password: string): boolean => {
     if (Number.isNaN(+password)) return false;
     return Number.isInteger(+password);
   };
@@ -49,31 +50,31 @@ class AuthService {
     return null;
   };
 
-  findToken = async (password: string) => {
+  findToken = async (password: string): Promise<TokenModel | null> => {
     if (!this.validatePassword(password)) return Promise.resolve(null);
 
     const token = await fetch(`api/auth/token/${password}`, {
       method: "GET",
     });
-    console.log(token);
+
     return await token.json();
   };
 
-  createToken = async (userId: number, payload: number) => {
-    await fetch("api/auth/token", {
+  createToken = async (userId: number, payload: number): Promise<void> => {
+    await fetch(`api/auth/token`, {
       method: "POST",
       body: JSON.stringify({ payload, userId }),
     });
   };
 
-  sendEmail = async (email: string, payload: number) => {
+  sendEmail = async (email: string, payload: number): Promise<void> => {
     await fetch("api/auth/mail", {
       method: "POST",
       body: JSON.stringify({ email, payload }),
     });
   };
 
-  authRequest = async (user: UserModel) => {
+  authRequest = async (user: UserModel): Promise<void> => {
     const payload = Math.floor(100000 + Math.random() * 900000);
 
     await Promise.allSettled([
@@ -82,7 +83,10 @@ class AuthService {
     ]);
   };
 
-  login = async (email: string, password: string) => {
+  login = async (
+    email: string,
+    password: string
+  ): Promise<UserModel | null> => {
     const [user, loginToken] = await Promise.all([
       this.findUser(email),
       this.findToken(password),

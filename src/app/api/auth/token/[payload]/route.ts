@@ -1,22 +1,29 @@
 import { database } from "@/database/databseClient";
 import { token } from "@/lib/TokenSchema/schema";
-import { eq } from "drizzle-orm";
+import { InferModel, eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
 type Params = {
   params: {
-    password: string;
+    payload: string;
   };
 };
 
-export async function GET(req: Request, { params }: Params) {
-  const { password } = params;
-  console.log(password);
+type ResponsType = NextResponse<InferModel<typeof token> | undefined>;
+
+export async function GET(
+  req: Request,
+  { params }: Params
+): Promise<ResponsType> {
+  const { payload } = params;
+  console.log(payload);
 
   const existToken = await database
     .select()
     .from(token)
-    .where(eq(token.payload, password));
+    .where(eq(token.payload, payload));
 
   return NextResponse.json(existToken[0]);
 }
+
+export type GetTokenReturnType = ReturnType<typeof GET>;
