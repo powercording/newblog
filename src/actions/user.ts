@@ -1,52 +1,30 @@
-"use server";
+// "use server";
 
-type UserInfo = {
-  id: number;
-  name: string;
-  email: string;
-  avatar: string | null;
-  createdAt: string;
-  updatedAt: string;
-  vaild: number | null;
-};
+// type UserInfo = {
+//   id: number;
+//   name: string;
+//   email: string;
+//   avatar: string | null;
+//   createdAt: string;
+//   updatedAt: string;
+//   vaild: number | null;
+// };
 
-type ExistUser = {
-  ok: true;
-  data: UserInfo;
-  status: number;
-  message: string;
-};
+// type ExistUser = {
+//   ok: true;
+//   data: UserInfo;
+//   status: number;
+//   message: string;
+// };
 
-type NoUser = {
-  ok: false;
-  data: undefined;
-  status: number;
-  message: string;
-};
+// export type User = ExistUser | null;
 
-export type User = ExistUser | NoUser;
+// import loginService from "@/app/service/AuthService";
 
-import loginService from "@/app/service/LoginService";
+// export const issueToken = async (email: string, user: User) => {
+//   if (!user) return null;
 
-export const pickUser = async (email: string): Promise<User> => {
-  const find = await loginService.findUser(email);
-
-  if (find) {
-    return { ok: true, data: find, status: 200, message: "success" };
-  }
-
-  return {
-    ok: false,
-    data: undefined,
-    status: 404,
-    message: "user not found",
-  };
-};
-
-export const issueToken = async (email: string, user: User) => {
-  if (user.ok === false) return null;
-
-  const payLoad = Math.floor(100000 + Math.random() * 900000);
-  loginService.createToken(payLoad, user.data.id);
-  loginService.sendEmail(email, payLoad);
-};
+//   const payLoad = Math.floor(100000 + Math.random() * 900000);
+//   loginService.createToken(payLoad, user.data.id);
+//   loginService.sendEmail(email, payLoad);
+// };

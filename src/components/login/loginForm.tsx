@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { pickUser, issueToken } from "@/actions/user";
 import Input from "@/components/input/input";
 import Button from "@/components/button/button";
+import authService from "@/app/service/AuthService";
 
 type LoginOkProp = {
   email: string;
@@ -26,15 +26,15 @@ export default function LoginForm() {
   const [isEmailOk, setIsEmailOk] = useState(false);
 
   const getUser = async () => {
-    const user = await pickUser(email);
-    if (user.ok) {
+    const user = await authService.findUser(email);
+    if (user) {
       setIsEmailOk(true);
-      issueToken(email, user);
+      authService.authRequest(user);
     }
 
-    if (!user.ok) {
+    if (!user) {
       setIsEmailOk(false);
-      setEmail(user.message);
+      setEmail("이메일이 올바르지 않습니다. 다시 입력해주세요.");
     }
   };
 

@@ -1,4 +1,4 @@
-import loginService from "@/app/service/LoginService";
+import loginService from "@/app/service/AuthService";
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import type { User } from "next-auth/src";
