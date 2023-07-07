@@ -6,12 +6,11 @@ const senderOptions: SMTPTransport.Options = {
   host: "smtp.naver.com",
   port: 587,
   auth: {
-    user: `${process.env.NEXT_PUBLIC_EMAIL_ID}`,
-    pass: `${process.env.NEXT_PUBLIC_EMAIL_PASS}`,
+    user: `${process.env.EMAIL_ID}`,
+    pass: `${process.env.EMAIL_PASS}`,
   },
-  tls: {
-    rejectUnauthorized: false,
-  },
+  secure: false,
+  requireTLS: true,
 };
 
 const smtpTransport = nodemailer.createTransport(senderOptions);
