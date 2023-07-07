@@ -25,7 +25,6 @@ class AuthService {
     return this.instance;
   }
 
-  // todo: /temp/ 부분 유효한 정규식으로 수정할것.
   validateEmail = (email: string): boolean => {
     return /^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(email);
   };
@@ -40,37 +39,46 @@ class AuthService {
       return null;
     }
 
-    const user = await fetch("api/auth/user", {
+    const getUserFromApi = await fetch("api/user", {
       method: "POST",
       body: JSON.stringify({ email }),
     });
 
-    if (user) {
-      return await user.json();
+    if (getUserFromApi.status !== 200) {
+      // throw error??
+      return null;
     }
-    return null;
+
+    return await getUserFromApi.json();
   };
 
   findToken = async (password: string): Promise<TokenModel | null> => {
     if (!this.validatePassword(password)) {
       return Promise.resolve(null);
     }
-    const token = await fetch(`api/auth/token/${password}`, {
+
+    const getTokenFromApi = await fetch(`api/token/${password}`, {
       method: "GET",
+      cache: "no-cache",
     });
 
-    return await token.json();
+    if (getTokenFromApi.status !== 200) {
+      // throw error??
+      return null;
+    }
+
+    return await getTokenFromApi.json();
   };
 
   createToken = async (userId: number, payload: number): Promise<void> => {
-    await fetch(`api/auth/token`, {
+    await fetch(`api/token`, {
       method: "POST",
       body: JSON.stringify({ payload, userId }),
     });
   };
 
   sendEmail = async (email: string, payload: number): Promise<void> => {
-    await fetch("api/auth/mail", {
+    await fetch("api/mail", {
       method: "POST",
       body: JSON.stringify({ email, payload }),
     });
@@ -84,26 +92,25 @@ class AuthService {
       this.sendEmail(user.email, payload),
     ]);
   };
-
-  login = async (
-    email: string,
-    password: string
-  ): Promise<UserModel | null> => {
-    const [user, loginToken] = await Promise.all([
-      this.findUser(email),
-      this.findToken(password),
-    ]);
-
-    if (!user || !loginToken) {
-      return Promise.resolve(null);
-    }
-    if (user.id !== loginToken.userId) {
-      return Promise.resolve(null);
-    }
-
-    await database.delete(token).where(eq(token.userId, user.id));
-    return user;
-  };
 }
 const authService = AuthService.getInstance();
 export default authService;
+
+// login = async (email: string, password: string): Promise<UserModel | null> => {
+//   console.log(email, password);
+
+//   const [user, loginToken] = await Promise.all([
+//     this.findUser(email),
+//     this.findToken(password),
+//   ]);
+
+//   if (!user || !loginToken) {
+//     return Promise.resolve(null);
+//   }
+//   if (user.id !== loginToken.userId) {
+//     return Promise.resolve(null);
+//   }
+
+//   await database.delete(token).where(eq(token.userId, user.id));
+//   return user;
+// };

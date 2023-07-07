@@ -1,4 +1,3 @@
-import loginService from "@/app/service/AuthService";
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import type { User } from "next-auth/src";
@@ -6,6 +5,10 @@ import {
   CredentialsConfig,
   CredentialInput,
 } from "next-auth/providers/credentials";
+import { database } from "@/database/databseClient";
+import { user } from "../UserSchema/schema";
+import { eq } from "drizzle-orm";
+import { token } from "../TokenSchema/schema";
 
 type MyUser = {} & User;
 
@@ -21,18 +24,33 @@ const passwordCredential: CredentialInput = {
 };
 
 const authorize: CredentialsConfig["authorize"] = async (credentials) => {
-  // null should be changed to proper value
-  if (!credentials) return Promise.resolve(null);
+  if (!credentials) {
+    return Promise.resolve(null);
+  }
+
   const { email, password } = credentials;
-  console.log(email, password);
 
-  const user = await loginService.login(email, password);
+  const users = await database.select().from(user).where(eq(user.email, email));
+  const tokens = await database
+    .select()
+    .from(token)
+    .where(eq(token.payload, password));
 
-  if (!user) return Promise.resolve(null);
+  if (!users[0] || !tokens[0]) {
+    console.log("no user or no token");
+    return null;
+  }
+  if (users[0].id !== tokens[0].userId) {
+    console.log("user id and token userId is not same");
+    return null;
+  }
+
+  await database.delete(token).where(eq(token.payload, password));
+
   const loginUser: MyUser = {
-    id: `${user.id}`,
+    id: `${users[0].id}`,
     email,
-    name: user.name,
+    name: `${users[0].name}`,
   };
 
   return loginUser;
@@ -52,4 +70,7 @@ export const authOptions: NextAuthOptions = {
       authorize,
     }),
   ],
+  pages: {
+    signIn: "/login",
+  },
 };

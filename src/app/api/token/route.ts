@@ -1,6 +1,5 @@
 import { database } from "@/database/databseClient";
 import { token } from "@/lib/TokenSchema/schema";
-import { InferModel } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {

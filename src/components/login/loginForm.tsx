@@ -39,12 +39,16 @@ export default function LoginForm() {
   };
 
   const onLogin = async () => {
-    const user = await signIn("credentials", {
+    await signIn("credentials", {
       email,
       password,
       callbackUrl: "/",
     });
   };
+
+  const disabled = isEmailOk ? true : false;
+  const onClick = isEmailOk ? onLogin : getUser;
+  const loginButtonText = isEmailOk ? "로그인" : "임시 비밀번호 받기";
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
@@ -56,7 +60,7 @@ export default function LoginForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          disabled={isEmailOk ? true : false}
+          disabled={disabled}
         />
         <Input
           type="text"
@@ -65,10 +69,10 @@ export default function LoginForm() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          disabled={isEmailOk ? false : true}
+          disabled={!disabled}
         />
-        <Button type="submit" onClick={isEmailOk ? onLogin : getUser}>
-          {isEmailOk ? "로그인" : "임시 비밀번호 받기"}
+        <Button type="submit" onClick={onClick}>
+          {loginButtonText}
         </Button>
       </div>
     </main>
