@@ -6,7 +6,7 @@ export async function POST(req: Request) {
   const { email, payload } = await req.json();
 
   const mailOptions: Mail["options"] = {
-    from: process.env.NEXT_PUBLIC_EMAIL_ID,
+    from: `마이블로그 <${process.env.EMAIL_ID}>`,
     to: email,
     subject: "마이블로그 인증번호 입니다.",
     text: `인증번호: ${payload}`,

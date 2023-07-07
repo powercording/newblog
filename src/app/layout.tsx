@@ -28,7 +28,7 @@ const menuList: MenuListProps[] = [
 const withLogInMenu: MenuListProps[] = [
   {
     locationName: "Add Post",
-    href: "/addPost",
+    href: "/post/add",
     key: "addPost",
   },
   { locationName: "Logout", href: undefined, key: "logout" },
