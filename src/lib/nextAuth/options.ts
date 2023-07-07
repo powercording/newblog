@@ -1,4 +1,4 @@
-import loginService from "@/app/service/AuthService";
+import authService from "@/app/service/AuthService";
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import type { User } from "next-auth/src";
@@ -21,13 +21,16 @@ const passwordCredential: CredentialInput = {
 };
 
 const authorize: CredentialsConfig["authorize"] = async (credentials) => {
-  // null should be changed to proper value
-  if (!credentials) return Promise.resolve(null);
+  if (!credentials) {
+    return Promise.resolve(null);
+  }
 
   const { email, password } = credentials;
-  const user = await loginService.login(email, password);
+  const user = await authService.login(email, password);
 
-  if (!user) return Promise.resolve(null);
+  if (!user) {
+    return Promise.resolve(null);
+  }
 
   const loginUser: MyUser = {
     id: `${user.id}`,

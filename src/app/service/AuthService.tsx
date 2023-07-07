@@ -38,14 +38,20 @@ class AuthService {
   findUser = async (email: string): Promise<UserModel | null> => {
     if (!this.validateEmail(email)) return null;
 
-    const user = await fetch("api/auth", {
+    const getUser = await fetch("api/auth", {
       method: "POST",
       body: JSON.stringify({ email }),
       cache: "no-cache",
     });
 
-    if (user) {
-      return await user.json();
+    if (getUser.status !== 200) {
+      // throw error??
+      return null;
+    }
+
+    if (getUser.status === 200) {
+      console.log(getUser);
+      return await getUser.json();
     }
     return null;
   };
@@ -55,6 +61,7 @@ class AuthService {
 
     const token = await fetch(`api/auth/token/${password}`, {
       method: "GET",
+      cache: "no-cache",
     });
 
     return await token.json();
@@ -87,10 +94,13 @@ class AuthService {
     email: string,
     password: string
   ): Promise<UserModel | null> => {
+    console.log(email, password);
     const [user, loginToken] = await Promise.all([
       this.findUser(email),
       this.findToken(password),
     ]);
+
+    console.log(user, loginToken);
 
     if (!user || !loginToken) return Promise.resolve(null);
     if (user.id !== loginToken.userId) return Promise.resolve(null);
