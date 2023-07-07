@@ -16,7 +16,6 @@ export async function GET(
   { params }: Params
 ): Promise<ResponsType> {
   const { payload } = params;
-  console.log(payload);
 
   const existToken = await database
     .select()

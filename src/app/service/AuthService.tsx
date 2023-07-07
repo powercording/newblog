@@ -36,12 +36,13 @@ class AuthService {
   };
 
   findUser = async (email: string): Promise<UserModel | null> => {
-    if (!this.validateEmail(email)) return null;
+    if (!this.validateEmail(email)) {
+      return null;
+    }
 
-    const user = await fetch("api/auth", {
+    const user = await fetch("api/auth/user", {
       method: "POST",
       body: JSON.stringify({ email }),
-      cache: "no-cache",
     });
 
     if (user) {
@@ -51,8 +52,9 @@ class AuthService {
   };
 
   findToken = async (password: string): Promise<TokenModel | null> => {
-    if (!this.validatePassword(password)) return Promise.resolve(null);
-
+    if (!this.validatePassword(password)) {
+      return Promise.resolve(null);
+    }
     const token = await fetch(`api/auth/token/${password}`, {
       method: "GET",
     });
@@ -92,8 +94,12 @@ class AuthService {
       this.findToken(password),
     ]);
 
-    if (!user || !loginToken) return Promise.resolve(null);
-    if (user.id !== loginToken.userId) return Promise.resolve(null);
+    if (!user || !loginToken) {
+      return Promise.resolve(null);
+    }
+    if (user.id !== loginToken.userId) {
+      return Promise.resolve(null);
+    }
 
     await database.delete(token).where(eq(token.userId, user.id));
     return user;

@@ -11,7 +11,7 @@ type MyUser = {} & User;
 
 const emailCredential: CredentialInput = {
   label: "Email",
-  type: "text",
+  type: "email",
   placeholder: "email",
 };
 const passwordCredential: CredentialInput = {
@@ -23,17 +23,18 @@ const passwordCredential: CredentialInput = {
 const authorize: CredentialsConfig["authorize"] = async (credentials) => {
   // null should be changed to proper value
   if (!credentials) return Promise.resolve(null);
-
   const { email, password } = credentials;
+  console.log(email, password);
+
   const user = await loginService.login(email, password);
 
   if (!user) return Promise.resolve(null);
-
   const loginUser: MyUser = {
     id: `${user.id}`,
     email,
     name: user.name,
   };
+
   return loginUser;
 };
 

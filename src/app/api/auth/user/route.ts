@@ -9,13 +9,12 @@ export async function POST(
   req: Request
 ): Promise<NextResponse<ResponsType | undefined>> {
   const { email } = await req.json();
-
   const existUser = await database
     .select()
     .from(user)
     .where(eq(user.email, email));
 
-  return NextResponse.json(existUser[0]);
+  return NextResponse.json({ ...existUser[0] });
 }
 
 export type GetUserReturnType = ReturnType<typeof POST>;
