@@ -1,11 +1,11 @@
-const formatter = new Intl.DateTimeFormat("ko-KR", {
-  year: "numeric",
-  month: "2-digit",
-  day: "2-digit",
+const formatter = new Intl.DateTimeFormat('ko-KR', {
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
 });
 
-const passedFormatter = new Intl.RelativeTimeFormat("ko", {
-  numeric: "auto",
+const passedFormatter = new Intl.RelativeTimeFormat('ko', {
+  numeric: 'auto',
 });
 
 export const dateFormat = (date: Date) => {
@@ -18,5 +18,5 @@ export const dateFormatter = (date: string) => {
   const diffDay = diff / (1000 * 60 * 60 * 24);
   const dayAgo = Number(diffDay.toFixed(0));
 
-  return passedFormatter.format(-dayAgo, "day");
+  return passedFormatter.format(-dayAgo, 'day');
 };

@@ -1,9 +1,9 @@
-import nodemailer from "nodemailer";
-import SMTPTransport from "nodemailer/lib/smtp-transport";
+import nodemailer from 'nodemailer';
+import SMTPTransport from 'nodemailer/lib/smtp-transport';
 
 const senderOptions: SMTPTransport.Options = {
-  service: "naver",
-  host: "smtp.naver.com",
+  service: 'naver',
+  host: 'smtp.naver.com',
   port: 587,
   auth: {
     user: `${process.env.EMAIL_ID}`,

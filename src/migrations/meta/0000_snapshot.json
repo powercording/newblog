@@ -48,10 +48,7 @@
       "indexes": {
         "Post_userName_id_idx": {
           "name": "Post_userName_id_idx",
-          "columns": [
-            "userName",
-            "id"
-          ],
+          "columns": ["userName", "id"],
           "isUnique": false
         }
       },
@@ -94,16 +91,12 @@
       "indexes": {
         "Token_payload_key": {
           "name": "Token_payload_key",
-          "columns": [
-            "payload"
-          ],
+          "columns": ["payload"],
           "isUnique": true
         },
         "Token_userId_idx": {
           "name": "Token_userId_idx",
-          "columns": [
-            "userId"
-          ],
+          "columns": ["userId"],
           "isUnique": false
         }
       },
@@ -168,16 +161,12 @@
       "indexes": {
         "User_email_key": {
           "name": "User_email_key",
-          "columns": [
-            "email"
-          ],
+          "columns": ["email"],
           "isUnique": true
         },
         "User_name_key": {
           "name": "User_name_key",
-          "columns": [
-            "name"
-          ],
+          "columns": ["name"],
           "isUnique": true
         }
       },

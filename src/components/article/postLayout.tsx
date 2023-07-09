@@ -1,6 +1,6 @@
-import { database } from "@/database/databseClient";
-import { post } from "@/lib/PostSchema/schema";
-import PostCard from "./PostCard";
+import { database } from '@/database/databseClient';
+import { post } from '@/lib/PostSchema/schema';
+import PostCard from './PostCard';
 
 export type Post = {
   id: number;
@@ -16,7 +16,7 @@ export default async function PostsLayout() {
 
   return (
     <div className="grid justify-center items-center grid-cols-3 gap-16 p-16 m-0 w-max">
-      {reversedPosts.map((post) => {
+      {reversedPosts.map(post => {
         return <PostCard post={post} key={post.id}></PostCard>;
       })}
     </div>

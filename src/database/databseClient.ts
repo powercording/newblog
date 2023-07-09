@@ -1,5 +1,5 @@
-import { drizzle } from "drizzle-orm/planetscale-serverless";
-import { connect } from "@planetscale/database";
+import { drizzle } from 'drizzle-orm/planetscale-serverless';
+import { connect } from '@planetscale/database';
 
 const databaseConnection = connect({
   host: process.env.DATABASE_HOST,

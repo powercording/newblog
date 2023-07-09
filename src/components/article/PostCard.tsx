@@ -1,7 +1,7 @@
-import Link from "next/link";
-import { Post } from "./postLayout";
-import { dateFormatter } from "@/lib/util/dateTimeFormatter";
-import Image from "next/image";
+import Link from 'next/link';
+import { Post } from './postLayout';
+import { dateFormatter } from '@/lib/util/dateTimeFormatter';
+import Image from 'next/image';
 
 interface PostCardProps {
   post: Post;
@@ -20,7 +20,7 @@ export default function PostCard({ post }: PostCardProps) {
         className="absolute top-0 bottom-0 left-0 right-0 z-0 object-fill"
         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcMbB_H1MBDItISAntq2ISPWyJR3cUcUIehg&usqp=CAU"
         alt="Profile Picture"
-        height={"100%"}
+        height={'100%'}
       ></img>
       <div>
         <h1 className="m-0 text-2xl leading-7 line-clamp-3">{title}</h1>
