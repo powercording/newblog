@@ -13,7 +13,7 @@ export type MarkdownViewerType = {
 export default function MarkdownViewer({ markdown }: MarkdownViewerType) {
   return (
     <ReactMarkdown
-      className="markdown prose px-10 py-20  break-words overflow-y-auto overflow-ellipsis w-screen max-w-full"
+      className="markdown prose py-20 break-words overflow-y-auto overflow-ellipsis"
       components={{
         code({ inline, className, children, ...props }) {
           const match = /language-(\w+)/.exec(className || '');
