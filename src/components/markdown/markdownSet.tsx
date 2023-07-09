@@ -49,8 +49,14 @@ export default function MarkdownSet({ markdown = emptyMarkdown, renderType }: Ma
 
   const handleMarkdownAutosave = () => {};
 
+  const buttonOneText = renderType === 'create' ? '글쓰기' : '수정';
+  const buttonOneCallback = renderType === 'create' ? handleMarkdownRegister : handleMarkdownUpdate;
+
+  const buttonTwoText = renderType === 'create' ? '임시1' : '삭제';
+  const buttonTwoCallback = renderType === 'create' ? handleMarkdownAutosave : hnadleMarkdownDelete;
+
   return (
-    <main className="grid lg:grid-cols-2 min-h-screen h-auto w-[80%] mx-auto">
+    <main className="grid lg:grid-cols-2 min-h-screen h-auto w-full xl:w-4/6 mx-auto mt-12">
       <MarkdownEditor markdown={markdownContent} setMarkdown={setMarkdownContent} />
       <MarkdownViewer markdown={markdownContent} />
       <div className="flex border fixed h-16 bottom-0 inset-x-0 lg:inset-x-[300px] bg-white rounded-t-lg drop-shadow-md shadow-md">
@@ -61,17 +67,11 @@ export default function MarkdownSet({ markdown = emptyMarkdown, renderType }: Ma
           onChange={e => setMarkdownTitle(e.target.value)}
           placeholder="제목을 입력해 주세요"
         />
-        <button
-          className="w-24 border-x hover:bg-zinc-200 text-black"
-          onClick={renderType === 'create' ? handleMarkdownRegister : handleMarkdownUpdate}
-        >
-          {renderType === 'create' ? '글쓰기' : '수정'}
+        <button className="w-24 border-x hover:bg-zinc-200 text-black" onClick={buttonOneCallback}>
+          {buttonOneText}
         </button>
-        <button
-          className="w-24 hover:bg-zinc-200 text-black"
-          onClick={renderType === 'create' ? handleMarkdownAutosave : hnadleMarkdownDelete}
-        >
-          {renderType === 'create' ? '임시1' : '삭제'}
+        <button className="w-24 hover:bg-zinc-200 text-black" onClick={buttonTwoCallback}>
+          {buttonTwoText}
         </button>
       </div>
     </main>

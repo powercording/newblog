@@ -1,12 +1,12 @@
-import { CSSProperties } from "react";
+import { CSSProperties } from 'react';
 
-interface InputProps extends Omit<React.ComponentProps<"input">, "style"> {
+interface InputProps extends Omit<React.ComponentProps<'input'>, 'style'> {
   style?: CSSProperties;
+  as?: 'textarea';
 }
 
-export default function Input({ ...props }: InputProps) {
+export default function Input({ as, ...props }: InputProps) {
   const { style } = props;
-
   const inputStyle = style || {};
   return (
     <input

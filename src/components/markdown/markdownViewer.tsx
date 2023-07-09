@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
+import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import rehypeRaw from 'rehype-raw';
@@ -10,10 +10,10 @@ export type MarkdownViewerType = {
   markdown?: string;
 };
 
-export default function MarkdownViewer({ markdown }: MarkdownViewerType) {
+export default async function MarkdownViewer({ markdown }: MarkdownViewerType) {
   return (
     <ReactMarkdown
-      className="markdown prose py-20 break-words overflow-y-auto overflow-ellipsis"
+      className="markdown prose py-6 px-5 break-words overflow-y-auto overflow-ellipsis max-w-full items-center"
       components={{
         code({ inline, className, children, ...props }) {
           const match = /language-(\w+)/.exec(className || '');
