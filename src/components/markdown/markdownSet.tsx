@@ -56,7 +56,7 @@ export default function MarkdownSet({ markdown = emptyMarkdown, renderType }: Ma
   const buttonTwoCallback = renderType === 'create' ? handleMarkdownAutosave : hnadleMarkdownDelete;
 
   return (
-    <main className="grid lg:grid-cols-2 min-h-screen h-auto w-full xl:w-4/6 mx-auto mt-12">
+    <main className="grid lg:grid-cols-2 min-h-screen h-auto w-full 2xl:w-3/4 mx-auto mt-12">
       <MarkdownEditor markdown={markdownContent} setMarkdown={setMarkdownContent} />
       <MarkdownViewer markdown={markdownContent} />
       <div className="flex border fixed h-16 bottom-0 inset-x-0 lg:inset-x-[300px] bg-white rounded-t-lg drop-shadow-md shadow-md">

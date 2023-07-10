@@ -1,6 +1,6 @@
 'use client';
 
-import ReactMarkdown from 'react-markdown';
+import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import rehypeRaw from 'rehype-raw';
@@ -10,7 +10,7 @@ export type MarkdownViewerType = {
   markdown?: string;
 };
 
-export default async function MarkdownViewer({ markdown }: MarkdownViewerType) {
+export default function MarkdownViewer({ markdown }: MarkdownViewerType) {
   return (
     <ReactMarkdown
       className="markdown prose prose-pre:p-0 py-6 px-5 break-words overflow-y-auto overflow-ellipsis max-w-full items-center"

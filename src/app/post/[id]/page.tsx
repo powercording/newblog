@@ -31,18 +31,19 @@ export default async function Post({ params: { id } }: Params) {
     'use server';
     //todo...
   };
+  // throw new Promise(() => {});
 
   const title = markdownPost[0].title;
   const userName = markdownPost[0].userName;
   const createdAt = markdownPost[0].createdAt;
 
   return (
-    <main className="">
+    <main className="min-h-screen">
       <header className="mt-12 min-h-fit border-b-gray-400 border-b">
-        <h1 className="block w-full xl:w-4/6 mx-auto p-5 text-2xl font-bold text-blue-600">
+        <h1 className="block w-full 2xl:w-3/4 mx-auto p-5 text-2xl font-bold text-blue-600">
           {title}
         </h1>
-        <address className="block w-full xl:w-4/6 mx-auto p-5">
+        <address className="block w-full 2xl:w-3/4 mx-auto p-5">
           <p>{userName}</p>
           <div className="flex text-gray-400">
             <time>{dateFormatter(createdAt)}</time>
@@ -57,12 +58,12 @@ export default async function Post({ params: { id } }: Params) {
           </div>
         </address>
       </header>
-      <div className="grid lg:grid-cols-3 w-full xl:w-4/6 justify-items-center mx-auto gap-2">
-        <article className="col-span-2 w-full">
+      <div className="grid grid-cols-3 w-full 2xl:w-3/4 justify-items-center mx-auto ">
+        <article className="col-span-3 lg:col-span-2 w-full">
           <MarkdownViewer markdown={markdownPost[0].content} />
         </article>
 
-        <aside className="w-full p-1">
+        <aside className="w-full p-1 col-span-3 lg:col-span-1">
           <div className="bg-gray-200 w-full rounded-lg p-5 sticky top-20">
             <div>댓글1</div>
             <div>댓글2</div>

@@ -31,11 +31,11 @@ body {
   );
 }
 
-.editor {
+/* .editor {
   scrollbar-gutter: stable;
 }
 
 .markdown {
   scrollbar-gutter: stable;
-}
+} */
 /* width: calc((100vw / 2) - 160px); */
