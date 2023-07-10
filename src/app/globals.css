@@ -31,11 +31,29 @@ body {
   );
 }
 
-/* .editor {
-  scrollbar-gutter: stable;
+.dropdown-span::after,
+.dropdown-span::before {
+  --size: 0.4rem;
+
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: var(--size) solid transparent;
+  border-right: var(--size) solid transparent;
+
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
 }
 
-.markdown {
-  scrollbar-gutter: stable;
-} */
-/* width: calc((100vw / 2) - 160px); */
+.dropdown-span::after {
+  border-bottom: var(--size) solid rgba(255, 255, 255, 0.5);
+  top: 35%;
+}
+
+.dropdown-span::before {
+  border-top: var(--size) solid rgba(255, 255, 255, 0.5);
+  top: 65%;
+}
