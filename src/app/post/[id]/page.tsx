@@ -32,14 +32,20 @@ export default async function Post({ params: { id } }: Params) {
     //todo...
   };
 
+  const title = markdownPost[0].title;
+  const userName = markdownPost[0].userName;
+  const createdAt = markdownPost[0].createdAt;
+
   return (
     <main className="">
       <header className="mt-12 min-h-fit border-b-gray-400 border-b">
-        <h1 className="block w-full xl:w-4/6 mx-auto p-5 text-2xl">{markdownPost[0].title}</h1>
+        <h1 className="block w-full xl:w-4/6 mx-auto p-5 text-2xl font-bold text-blue-600">
+          {title}
+        </h1>
         <address className="block w-full xl:w-4/6 mx-auto p-5">
-          <p>{markdownPost[0].userName}</p>
-          <div className="flex">
-            <time>{dateFormatter(markdownPost[0].createdAt)}</time>
+          <p>{userName}</p>
+          <div className="flex text-gray-400">
+            <time>{dateFormatter(createdAt)}</time>
             {isOwner && (
               <Link
                 href={`post/edit/${id}`}
@@ -51,13 +57,13 @@ export default async function Post({ params: { id } }: Params) {
           </div>
         </address>
       </header>
-      <div className="grid lg:grid-cols-3 w-full xl:w-4/6 justify-items-center mx-auto">
+      <div className="grid lg:grid-cols-3 w-full xl:w-4/6 justify-items-center mx-auto gap-2">
         <article className="col-span-2 w-full">
           <MarkdownViewer markdown={markdownPost[0].content} />
         </article>
 
         <aside className="w-full p-1">
-          <div className="bg-gray-200 w-full rounded-lg p-5">
+          <div className="bg-gray-200 w-full rounded-lg p-5 sticky top-20">
             <div>댓글1</div>
             <div>댓글2</div>
             <div>댓글3</div>

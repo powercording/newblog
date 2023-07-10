@@ -13,7 +13,7 @@ export type MarkdownViewerType = {
 export default async function MarkdownViewer({ markdown }: MarkdownViewerType) {
   return (
     <ReactMarkdown
-      className="markdown prose py-6 px-5 break-words overflow-y-auto overflow-ellipsis max-w-full items-center"
+      className="markdown prose prose-pre:p-0 py-6 px-5 break-words overflow-y-auto overflow-ellipsis max-w-full items-center"
       components={{
         code({ inline, className, children, ...props }) {
           const match = /language-(\w+)/.exec(className || '');
@@ -23,6 +23,7 @@ export default async function MarkdownViewer({ markdown }: MarkdownViewerType) {
               style={vscDarkPlus}
               language={match[1] ?? 'jsx'}
               PreTag="div"
+              customStyle={{ margin: 0 }}
             >
               {String(children).replace(/\n$/, '')}
             </SyntaxHighlighter>
