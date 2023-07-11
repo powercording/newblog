@@ -1,10 +1,12 @@
-import { InferModel } from "drizzle-orm";
-import { post } from "@/lib/PostSchema/schema";
+import { InferModel } from 'drizzle-orm';
+import { post } from '@/lib/PostSchema/schema';
+
+const origin = process.env.ORIGIN;
 
 type Markdown = {
   content: string;
   title: string;
-} & Omit<Partial<InferModel<typeof post>>, "content" | "title">;
+} & Omit<Partial<InferModel<typeof post>>, 'content' | 'title'>;
 
 class PostService {
   private static instance: PostService;
@@ -12,7 +14,7 @@ class PostService {
   constructor() {
     if (PostService.instance) {
       throw new Error(
-        "Error: Instantiation failed: Use LoginService.getInstance() instead of new."
+        'Error: Instantiation failed: Use LoginService.getInstance() instead of new.',
       );
     }
     PostService.instance = this;
@@ -26,8 +28,8 @@ class PostService {
   }
 
   insertPost = async (markdownModel: Markdown) => {
-    const result = await fetch("/api/post", {
-      method: "POST",
+    const result = await fetch(`${origin}/api/post`, {
+      method: 'POST',
       body: JSON.stringify(markdownModel),
     });
     if (result.status === 200) {
@@ -36,17 +38,17 @@ class PostService {
   };
 
   deleteMarkdown = async (id: number) => {
-    const deleteResult = await fetch(`/api/post/${id}`, {
-      method: "DELETE",
+    const deleteResult = await fetch(`${origin}/api/post/${id}`, {
+      method: 'DELETE',
     });
     if (deleteResult.status === 200) {
-      return (window.location.href = "/");
+      return (window.location.href = '/');
     }
   };
 
   updateMarkdown = async (markdownModel: Markdown) => {
-    const result = await fetch("/api/post", {
-      method: "PATCH",
+    const result = await fetch(`${origin}/api/post`, {
+      method: 'PATCH',
       body: JSON.stringify(markdownModel),
     });
     if (result.status === 200) {

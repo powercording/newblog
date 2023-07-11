@@ -4,7 +4,8 @@ import { InferModel } from 'drizzle-orm';
 
 type UserModel = InferModel<typeof User>;
 type TokenModel = InferModel<typeof token>;
-const origin = process.env.ORIGIN;
+export type CustomError = { error: { message: string }; status: number };
+const host = process.env.LOCALHOST;
 
 class AuthService {
   private static instance: AuthService;
@@ -22,6 +23,9 @@ class AuthService {
     }
     return this.instance;
   }
+  errorCreate = (status: number, message: string): CustomError => {
+    return { error: { message }, status };
+  };
 
   validateEmail = (email: string): boolean => {
     return /^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(email);
@@ -37,17 +41,20 @@ class AuthService {
       return null;
     }
 
-    const getUserFromApi = await fetch(`${origin}/api/user`, {
+    const getUserFromApi = await fetch(`${host}/api/user`, {
       method: 'POST',
       body: JSON.stringify({ email }),
+      cache: 'no-cache',
     });
 
-    if (getUserFromApi.status !== 200 || Object.keys(getUserFromApi).length === 0) {
+    const user = await getUserFromApi.json();
+
+    if (getUserFromApi.status !== 200 || Object.keys(user).length === 0) {
       // throw error??
       return null;
     }
 
-    return await getUserFromApi.json();
+    return user;
   };
 
   findToken = async (password: string): Promise<TokenModel | null> => {
@@ -55,17 +62,19 @@ class AuthService {
       return Promise.resolve(null);
     }
 
-    const getTokenFromApi = await fetch(`${origin}/api/token/${password}`, {
+    const getTokenFromApi = await fetch(`${host}/api/token/${password}`, {
       method: 'GET',
       cache: 'no-cache',
     });
 
-    if (getTokenFromApi.status !== 200 || Object.keys(getTokenFromApi).length === 0) {
+    const token = await getTokenFromApi.json();
+
+    if (getTokenFromApi.status !== 200 || Object.keys(token).length === 0) {
       // throw error??
       return null;
     }
 
-    return await getTokenFromApi.json();
+    return token;
   };
 
   createToken = async (userId: number, payload: number): Promise<void> => {
@@ -95,13 +104,30 @@ class AuthService {
     // 현재 nextauth 에서 authService 클래스 인스턴스호출하여 메서드 실행시 오류가 발생하고 있음.
   };
 
-  join = async (email: string): Promise<void | null> => {
-    const user = await this.findUser(email);
-    if (user) {
-      return null;
+  join = async (email: string): Promise<UserModel | CustomError> => {
+    if (!this.validateEmail(email)) {
+      return this.errorCreate(400, '이메일 형식이 올바르지 않습니다.');
     }
 
-    const newUser = await fetch(`${origin}/api/user`, {});
+    const user = await this.findUser(email);
+    if (user) {
+      return this.errorCreate(400, '이미 가입된 이메일입니다.');
+    }
+
+    const userInsertResult = await fetch(`${host}/api/user`, {
+      method: 'PUT',
+      body: JSON.stringify({ email }),
+      cache: 'no-cache',
+    });
+
+    const result = await userInsertResult.json();
+
+    if (userInsertResult.status !== 200) {
+      return this.errorCreate(500, '회원가입이 실패 했습니다. 다시 시도해주세요');
+    }
+
+    // TODO: or Redirect to login page
+    return result;
   };
 }
 const authService = AuthService.getInstance();

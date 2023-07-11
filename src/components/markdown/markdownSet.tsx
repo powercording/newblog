@@ -111,7 +111,7 @@ export default function MarkdownSet({ markdown = emptyMarkdown, renderType }: Ma
             <span className="absolute w-8 h-full bg-gray-500 right-0 rounded-r-md border-none pointer-events-none dropdown-span"></span>
           </div>
           <div className="px-2 flex gap-2 items-center absolute top-36 md:static">
-            {categories.map(category => (
+            {categories?.map(category => (
               <span
                 className="h-fit bg-slate-300 w-24 rounded-full flex items-center justify-center text-white font-semibold cursor-pointer"
                 key={category}
