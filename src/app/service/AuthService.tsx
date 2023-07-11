@@ -1,19 +1,17 @@
-import { database } from "@/database/databseClient";
-import { token } from "@/lib/TokenSchema/schema";
-import { user as User } from "@/lib/UserSchema/schema";
-import { InferModel, eq } from "drizzle-orm";
+import { token } from '@/lib/TokenSchema/schema';
+import { user as User } from '@/lib/UserSchema/schema';
+import { InferModel } from 'drizzle-orm';
 
 type UserModel = InferModel<typeof User>;
 type TokenModel = InferModel<typeof token>;
+const origin = process.env.ORIGIN;
 
 class AuthService {
   private static instance: AuthService;
 
   constructor() {
     if (AuthService.instance) {
-      throw new Error(
-        "Error: Instantiation failed: Use Authservice.getInstance() instead of new."
-      );
+      throw new Error('Error: Instantiation failed: Use Authservice.getInstance() instead of new.');
     }
     AuthService.instance = this;
   }
@@ -39,12 +37,12 @@ class AuthService {
       return null;
     }
 
-    const getUserFromApi = await fetch("api/user", {
-      method: "POST",
+    const getUserFromApi = await fetch(`${origin}/api/user`, {
+      method: 'POST',
       body: JSON.stringify({ email }),
     });
 
-    if (getUserFromApi.status !== 200) {
+    if (getUserFromApi.status !== 200 || Object.keys(getUserFromApi).length === 0) {
       // throw error??
       return null;
     }
@@ -57,12 +55,12 @@ class AuthService {
       return Promise.resolve(null);
     }
 
-    const getTokenFromApi = await fetch(`api/token/${password}`, {
-      method: "GET",
-      cache: "no-cache",
+    const getTokenFromApi = await fetch(`${origin}/api/token/${password}`, {
+      method: 'GET',
+      cache: 'no-cache',
     });
 
-    if (getTokenFromApi.status !== 200) {
+    if (getTokenFromApi.status !== 200 || Object.keys(getTokenFromApi).length === 0) {
       // throw error??
       return null;
     }
@@ -72,14 +70,14 @@ class AuthService {
 
   createToken = async (userId: number, payload: number): Promise<void> => {
     await fetch(`api/token`, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify({ payload, userId }),
     });
   };
 
   sendEmail = async (email: string, payload: number): Promise<void> => {
-    await fetch("api/mail", {
-      method: "POST",
+    await fetch('api/mail', {
+      method: 'POST',
       body: JSON.stringify({ email, payload }),
     });
   };
@@ -92,25 +90,19 @@ class AuthService {
       this.sendEmail(user.email, payload),
     ]);
   };
+
+  login = async (email: string, password: string): Promise<void> => {
+    // 현재 nextauth 에서 authService 클래스 인스턴스호출하여 메서드 실행시 오류가 발생하고 있음.
+  };
+
+  join = async (email: string): Promise<void | null> => {
+    const user = await this.findUser(email);
+    if (user) {
+      return null;
+    }
+
+    const newUser = await fetch(`${origin}/api/user`, {});
+  };
 }
 const authService = AuthService.getInstance();
 export default authService;
-
-// login = async (email: string, password: string): Promise<UserModel | null> => {
-//   console.log(email, password);
-
-//   const [user, loginToken] = await Promise.all([
-//     this.findUser(email),
-//     this.findToken(password),
-//   ]);
-
-//   if (!user || !loginToken) {
-//     return Promise.resolve(null);
-//   }
-//   if (user.id !== loginToken.userId) {
-//     return Promise.resolve(null);
-//   }
-
-//   await database.delete(token).where(eq(token.userId, user.id));
-//   return user;
-// };

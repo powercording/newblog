@@ -1,10 +1,18 @@
+'use client';
+
 import Button from '@/components/button/button';
 import Input from '@/components/input/input';
-import loginHandler from '@/app/service/AuthService';
+import { InferModel } from 'drizzle-orm';
+import { user } from '@/lib/UserSchema/schema';
 
-export default function JoinForm() {
+interface JoinForm {
+  action: (email: string) => Promise<InferModel<typeof user> | null>;
+}
+
+export default function JoinForm({ action }: JoinForm) {
   const handleSubmit = async (formData: FormData) => {
-    'use server';
+    const user = await action(formData.get('email') as string);
+    console.log(user);
   };
 
   return (
