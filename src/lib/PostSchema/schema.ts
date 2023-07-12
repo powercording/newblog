@@ -1,4 +1,4 @@
-import { mysqlTable, index, int, varchar, text, datetime } from 'drizzle-orm/mysql-core';
+import { mysqlTable, index, int, varchar, text, datetime, json } from 'drizzle-orm/mysql-core';
 import { sql } from 'drizzle-orm';
 
 export const post = mysqlTable(
@@ -11,6 +11,7 @@ export const post = mysqlTable(
       .default(sql`(CURRENT_TIMESTAMP(3))`)
       .notNull(),
     userName: varchar('userName', { length: 191 }).notNull(),
+    categories: json('categories'),
   },
   table => {
     return {

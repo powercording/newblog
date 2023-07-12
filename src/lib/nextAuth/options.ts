@@ -39,7 +39,7 @@ const authorize: CredentialsConfig['authorize'] = async credentials => {
     return null;
   }
 
-  await database.delete(token).where(eq(token.payload, password));
+  await database.delete(token).where(eq(token.userId, users[0].id));
 
   const loginUser: MyUser = {
     id: `${users[0].id}`,

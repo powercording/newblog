@@ -1,7 +1,7 @@
 import { InferModel } from 'drizzle-orm';
 import { post } from '@/lib/PostSchema/schema';
 
-const origin = process.env.ORIGIN;
+const host = process.env.LOCALHOST;
 
 type Markdown = {
   content: string;
@@ -28,7 +28,7 @@ class PostService {
   }
 
   insertPost = async (markdownModel: Markdown) => {
-    const result = await fetch(`${origin}/api/post`, {
+    const result = await fetch(`/api/post`, {
       method: 'POST',
       body: JSON.stringify(markdownModel),
     });
@@ -38,7 +38,7 @@ class PostService {
   };
 
   deleteMarkdown = async (id: number) => {
-    const deleteResult = await fetch(`${origin}/api/post/${id}`, {
+    const deleteResult = await fetch(`${host}/api/post/${id}`, {
       method: 'DELETE',
     });
     if (deleteResult.status === 200) {
@@ -47,7 +47,7 @@ class PostService {
   };
 
   updateMarkdown = async (markdownModel: Markdown) => {
-    const result = await fetch(`${origin}/api/post`, {
+    const result = await fetch(`${host}/api/post`, {
       method: 'PATCH',
       body: JSON.stringify(markdownModel),
     });

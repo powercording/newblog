@@ -19,6 +19,7 @@ const emptyMarkdown: InferModel<typeof post> = {
   title: '',
   userName: '',
   createdAt: '',
+  categories: [],
 };
 
 const categoryList = [
