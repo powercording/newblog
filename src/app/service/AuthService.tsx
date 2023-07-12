@@ -36,9 +36,9 @@ class AuthService {
     return Number.isInteger(+password);
   };
 
-  findUser = async (email: string): Promise<UserModel | null> => {
+  findUser = async (email: string): Promise<UserModel | CustomError> => {
     if (!this.validateEmail(email)) {
-      return null;
+      return { status: 400, error: { message: '올바른 이메일을 입력하세요' } };
     }
 
     const getUserFromApi = await fetch(`${host}/api/user`, {
@@ -49,9 +49,13 @@ class AuthService {
 
     const user = await getUserFromApi.json();
 
-    if (getUserFromApi.status !== 200 || Object.keys(user).length === 0) {
+    if (getUserFromApi.status !== 200) {
       // throw error??
-      return null;
+      return { status: 500, error: { message: '요청을 처리하지 못했습니다. 다시 시도해주세요' } };
+    }
+
+    if (Object.keys(user).length === 0) {
+      return user; // empty User === 회원이 아님.(가입 가능)
     }
 
     return user;
@@ -78,16 +82,19 @@ class AuthService {
   };
 
   createToken = async (userId: number, payload: number): Promise<void> => {
-    await fetch(`api/token`, {
+    await fetch(`${host}/api/token`, {
       method: 'POST',
       body: JSON.stringify({ payload, userId }),
+      cache: 'no-cache',
     });
   };
 
   sendEmail = async (email: string, payload: number): Promise<void> => {
-    await fetch('api/mail', {
+    console.log(email);
+    await fetch(`${host}/api/mail`, {
       method: 'POST',
       body: JSON.stringify({ email, payload }),
+      cache: 'no-cache',
     });
   };
 
@@ -105,12 +112,13 @@ class AuthService {
   };
 
   join = async (email: string): Promise<UserModel | CustomError> => {
-    if (!this.validateEmail(email)) {
-      return this.errorCreate(400, '이메일 형식이 올바르지 않습니다.');
+    const user = await this.findUser(email);
+
+    if ('error' in user) {
+      return this.errorCreate(user.status, user.error.message);
     }
 
-    const user = await this.findUser(email);
-    if (user) {
+    if ('email' in user) {
       return this.errorCreate(400, '이미 가입된 이메일입니다.');
     }
 

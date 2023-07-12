@@ -4,77 +4,80 @@ import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import Input from '@/components/input/input';
 import Button from '@/components/button/button';
-import authService from '@/app/service/AuthService';
+import { LoginRequestResult } from '@/app/login/page';
 
 type LoginOkProp = {
-  email: string;
-  password: string;
   isEmailOk: true;
+  email: string;
 };
 
 type LoginFailProp = {
-  email: string;
-  password: string;
   isEmailOk: false;
+  errorMessage?: string;
 };
 
 type LoginProp = LoginOkProp | LoginFailProp;
 
-export default function LoginForm() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isEmailOk, setIsEmailOk] = useState(false);
+interface LoginForm {
+  getUserFromAction: (formData: FormData) => Promise<LoginRequestResult>;
+}
 
-  const getUser = async () => {
-    const user = await authService.findUser(email);
-    if (user) {
-      setIsEmailOk(true);
-      authService.authRequest(user);
+export default function LoginForm({ getUserFromAction }: LoginForm) {
+  const [loginState, setLoginState] = useState<LoginProp>({ isEmailOk: false });
+
+  const getUser = async (formData: FormData) => {
+    const user = await getUserFromAction(formData);
+
+    if ('error' in user) {
+      setLoginState({ isEmailOk: false, errorMessage: user.error.message });
     }
-
-    if (!user) {
-      setIsEmailOk(false);
-      setEmail('이메일이 올바르지 않습니다. 다시 입력해주세요.');
+    if ('email' in user) {
+      setLoginState({ isEmailOk: true, email: user.email });
     }
   };
 
-  const onLogin = async () => {
+  const onLogin = async (formData: FormData) => {
+    if (!loginState.isEmailOk) {
+      return alert('올바르지 않은 접근입니다.');
+    }
+    const password = formData.get('password') as string;
+
+
     await signIn('credentials', {
-      email,
+      email: loginState.email,
       password,
       callbackUrl: '/',
     });
   };
 
-  const disabled = isEmailOk ? true : false;
-  const onClick = isEmailOk ? onLogin : getUser;
-  const loginButtonText = isEmailOk ? '로그인' : '임시 비밀번호 받기';
+  const reSetState = () => {
+    setLoginState({ isEmailOk: false });
+  };
+
+  const disabled = loginState.isEmailOk ? true : false;
+  const isEmailChecked = disabled;
+  const errorMessage = loginState.isEmailOk ? null : loginState.errorMessage;
+  const loginButtonText = isEmailChecked ? '로그인' : '임시 비밀번호 받기';
+  const action = isEmailChecked ? onLogin : getUser;
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="grid gap-5">
-        <Input
-          type="email"
-          name="email"
-          placeholder="이메일"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          required
-          disabled={disabled}
-        />
-        <Input
-          type="text"
-          name="password"
-          placeholder="비밀번호"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          required
-          disabled={!disabled}
-        />
-        <Button type="submit" onClick={onClick}>
-          {loginButtonText}
-        </Button>
-      </div>
+      <form className="grid gap-5" action={action}>
+        <Input type="email" name="email" placeholder="이메일" required disabled={disabled} />
+        <Input type="text" name="password" placeholder="비밀번호" required disabled={!disabled} />
+        <Button type="submit">{loginButtonText}</Button>
+        <span className="text-red-300  text-xs px-1">
+          {errorMessage ?? ''}
+          {isEmailChecked && (
+            <p
+              className="text-blue-300 underline-offset-2 underline cursor-pointer"
+              onClick={reSetState}
+            >
+              다시 입력하기
+            </p>
+          )}
+        </span>
+      </form>
     </main>
   );
 }

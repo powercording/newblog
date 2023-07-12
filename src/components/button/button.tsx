@@ -12,7 +12,7 @@ export default function Button<C extends React.ElementType>({ as, ...props }: Bu
     <Component
       {...props}
       type={props.type ?? 'button'}
-      className="bg-gray-300 p-2 rounded-md text-gray-400 peer-valid:text-black peer-valid:bg-gray-100 peer-valid:hover:bg-white"
+      className="bg-blue-200 p-2 rounded-md text-gray-400 peer-valid:text-white peer-valid:bg-blue-400 peer-valid:hover:bg-blue-500"
       style={style}
     />
   );
