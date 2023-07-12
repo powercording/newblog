@@ -1,6 +1,6 @@
 'use client';
 
-import { useChat, useCompletion } from 'ai/react';
+import { useChat } from 'ai/react';
 import { ChangeEvent } from 'react';
 import { AiOutlineEnter } from 'react-icons/ai';
 import AiChatRow from './aiChatRow';
