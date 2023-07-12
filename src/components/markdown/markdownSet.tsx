@@ -46,6 +46,7 @@ export default function MarkdownSet({ markdown = emptyMarkdown, renderType }: Ma
   const handleMarkdownRegister = async () => {
     if (!markdownContent || !markdonwTitle || !categories.length)
       return alert('제목과 내용을 입력해주세요');
+
     await postService.insertPost({
       content: markdownContent,
       title: markdonwTitle,
