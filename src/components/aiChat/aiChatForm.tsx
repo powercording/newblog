@@ -33,12 +33,12 @@ export default function AiChatForm() {
             return <AiChatRow key={message.id} message={message} />;
           })
         ) : (
-          <p className="text-center text-gray-500 mt-5 text-sm">인공지능과 채팅을 해보세요!</p>
+          <p className="text-center text-gray-400 mt-5 text-sm">인공지능과 채팅을 해보세요!</p>
         )}
       </section>
 
       <form
-        className="w-full lg:w-[600px] shadow-lg fixed bottom-0 bg-white border rounded-tr-lg rounded-tl-lg self-center text-center p-2 space-y-2 h-auto"
+        className="w-full lg:w-[600px] fixed bottom-0 bg-white border rounded-tr-lg rounded-tl-lg self-center text-center p-2 space-y-2 h-auto"
         onSubmit={handleSubmit}
       >
         <div className="relative flex flex-col w-full px-8 overflow-hidden max-h-60 grow bg-background rounded-md border sm:px-12">

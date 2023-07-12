@@ -139,7 +139,7 @@ export default function MarkdownSet({ markdown = emptyMarkdown, renderType }: Ma
           </div>
         </section>
       </section>
-      <section className="grid lg:grid-cols-2 min-h-screen h-auto w-full 2xl:w-3/4 mx-auto mt-4 px-5">
+      <section className="grid lg:grid-cols-2 min-h-screen h-auto w-full 2xl:w-3/4 mx-auto mt-4 px-5 gap-3 pb-4">
         <MarkdownEditor markdown={markdownContent} setMarkdown={setMarkdownContent} />
         <MarkdownViewer markdown={markdownContent} />
       </section>

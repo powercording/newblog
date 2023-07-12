@@ -37,7 +37,7 @@ export default function JoinForm({ joinAction }: JoinForm) {
       <form action={handleSubmit} className="grid gap-5 relative">
         <Input type="email" name="email" placeholder="이메일" required />
         <Button type="submit">가입하기</Button>
-        <span className="text-red-300 absolute -bottom-5 text-xs px-1">{errorMessage ?? ''}</span>
+        <span className="text-red-300 text-xs px-1">{errorMessage ?? ''}</span>
       </form>
     </main>
   );

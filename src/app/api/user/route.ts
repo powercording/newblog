@@ -2,7 +2,6 @@ import { database } from '@/database/databseClient';
 import { user } from '@/lib/UserSchema/schema';
 import { InferModel, eq, sql } from 'drizzle-orm';
 import { NextResponse } from 'next/server';
-import { timestamp } from 'drizzle-orm/mysql-core';
 
 type ResponsType = InferModel<typeof user>;
 

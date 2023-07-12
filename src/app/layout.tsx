@@ -70,7 +70,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
       <body className={`${inter.className} min-h-screen h-auto`}>
         <MenuLayout menuList={currentMenu} session={session}></MenuLayout>
         {children}
-        <footer className="w-full h-20 bg-gray-200 flex justify-center items-center text-gray-400 gap-5">
+        <footer className="w-full h-20 bg-gray-900 flex justify-center items-center text-gray-400 gap-5">
           <span>powered by Next.js | author: powercording</span>
           <span>HP: 01020732223</span>
         </footer>

@@ -38,7 +38,7 @@ class AuthService {
 
   findUser = async (email: string): Promise<UserModel | CustomError> => {
     if (!this.validateEmail(email)) {
-      return { status: 400, error: { message: '올바른 이메일을 입력하세요' } };
+      return this.errorCreate(400, '올바른 이메일을 입력하세요');
     }
 
     const getUserFromApi = await fetch(`${host}/api/user`, {
@@ -51,7 +51,7 @@ class AuthService {
 
     if (getUserFromApi.status !== 200) {
       // throw error??
-      return { status: 500, error: { message: '요청을 처리하지 못했습니다. 다시 시도해주세요' } };
+      return this.errorCreate(500, '요청을 처리하지 못했습니다. 다시 시도해주세요');
     }
 
     if (Object.keys(user).length === 0) {

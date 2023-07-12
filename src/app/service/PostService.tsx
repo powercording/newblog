@@ -38,7 +38,7 @@ class PostService {
   };
 
   deleteMarkdown = async (id: number) => {
-    const deleteResult = await fetch(`${host}/api/post/${id}`, {
+    const deleteResult = await fetch(`/api/post/${id}`, {
       method: 'DELETE',
     });
     if (deleteResult.status === 200) {
@@ -47,7 +47,7 @@ class PostService {
   };
 
   updateMarkdown = async (markdownModel: Markdown) => {
-    const result = await fetch(`${host}/api/post`, {
+    const result = await fetch(`/api/post`, {
       method: 'PATCH',
       body: JSON.stringify(markdownModel),
     });
