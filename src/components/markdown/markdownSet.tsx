@@ -90,15 +90,15 @@ export default function MarkdownSet({ markdown = emptyMarkdown, renderType }: Ma
 
   return (
     <main>
-      <section className="mt-12 min-h-fit border-b-gray-400 border-b w-full 2xl:w-3/4 mx-auto px-5 relative">
+      <section className="mt-12 min-h-fit border-b-gray-400 border-b w-full  px-5 relative bg-black">
         <input
-          className="block py-3 text-2xl text-black focus:outline-none bg-transparent border-b border-blue-300 w-full pt-8"
+          className="block py-3 text-2xl text-gray-200 focus:outline-none bg-transparent border-b border-blue-300 w-full mx-auto 2xl:w-3/4 pt-8"
           placeholder="제목을 입력하세요"
           type="text"
           value={markdonwTitle ?? ''}
           onChange={e => setMarkdownTitle(e.target.value)}
         />
-        <section className="w-full mx-auto py-2 flex">
+        <section className="w-full 2xl:w-3/4 mx-auto py-2 flex text-gray-400">
           <div className="relative">
             <select
               className="rounded-md h-full bg-transparent pl-6 pr-16 border border-gray-300 focus:outline-none cursor-pointer"
