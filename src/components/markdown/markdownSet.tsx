@@ -8,7 +8,6 @@ import { post } from '@/lib/PostSchema/schema';
 import postService from '@/app/service/PostService';
 import { getSession } from 'next-auth/react';
 import { BsPencil } from 'react-icons/bs';
-import { FiTool } from 'react-icons/fi';
 
 type MarkdownSet = {
   renderType: 'edit' | 'create';
@@ -93,7 +92,6 @@ export default function MarkdownSet({ markdown = emptyMarkdown, renderType }: Ma
     setCategories(categories.filter(c => c !== category));
   };
 
-  const buttonOneIcon = renderType === 'create' ? <BsPencil /> : <FiTool />;
   const buttonOneCallback = renderType === 'create' ? handleMarkdownRegister : handleMarkdownUpdate;
 
   const buttonTwoText = renderType === 'create' ? '임시' : '삭제';
@@ -115,7 +113,7 @@ export default function MarkdownSet({ markdown = emptyMarkdown, renderType }: Ma
               className="p-2 rounded-md hover:bg-blue-100 bg-white text-blue-700 w-fit h-9"
               onClick={buttonOneCallback}
             >
-              {buttonOneIcon}
+              <BsPencil />
             </button>
             <button
               className="p-2 rounded-md hover:bg-blue-100 bg-white text-blue-700 w-fit h-9"
@@ -152,7 +150,7 @@ export default function MarkdownSet({ markdown = emptyMarkdown, renderType }: Ma
           </div>
         </section>
       </section>
-      <section className="grid lg:grid-cols-2 min-h-screen h-auto w-full 2xl:w-3/4 mx-auto mt-4 px-5 pb-8 gap-3">
+      <section className="grid lg:grid-cols-2 min-h-screen h-auto w-full 2xl:w-3/4 mx-auto mt-4 px-5 pb-8">
         <MarkdownEditor markdown={markdownContent} setMarkdown={setMarkdownContent} />
         <MarkdownViewer markdown={markdownContent} />
       </section>

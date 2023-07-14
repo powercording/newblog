@@ -1,12 +1,15 @@
 import Input from '@/components/input/input';
 import MarkdownViewer from '@/components/markdown/markdownViewer';
+import Link from 'next/link';
+import { FiTool } from 'react-icons/fi';
+
 import { database } from '@/database/databseClient';
 import { post } from '@/lib/PostSchema/schema';
 import { authOptions } from '@/lib/nextAuth/options';
+import { getServerSession } from 'next-auth';
+
 import { dateFormatter } from '@/lib/util/dateTimeFormatter';
 import { eq } from 'drizzle-orm';
-import { getServerSession } from 'next-auth';
-import Link from 'next/link';
 
 export type Params = {
   params: {
@@ -39,8 +42,8 @@ export default async function Post({ params: { id } }: Params) {
 
   return (
     <main className="min-h-screen">
-      <header className="mt-12 min-h-fit  bg-slate-800">
-        <h1 className="block w-full 2xl:w-3/4 mx-auto p-5 text-2xl font-bold text-blue-600">
+      <header className="mt-12 min-h-fit  bg-slate-800 relative">
+        <h1 className="block w-full 2xl:w-3/4 mx-auto p-5 text-2xl font-bold text-blue-500">
           {title}
         </h1>
         <address className="block w-full 2xl:w-3/4 mx-auto p-5 text-gray-400">
@@ -48,11 +51,10 @@ export default async function Post({ params: { id } }: Params) {
           <div className="flex">
             <time>{dateFormatter(createdAt)}</time>
             {isOwner && (
-              <Link
-                href={`post/edit/${id}`}
-                className="ml-auto hover:drop-shadow-md p-1 font-semibold"
-              >
-                <button>수정하기</button>
+              <Link href={`post/edit/${id}`} className="absolute right-5 top-5">
+                <button className="p-2 rounded-md hover:bg-blue-100 bg-white text-blue-700 w-fit h-9">
+                  <FiTool />
+                </button>
               </Link>
             )}
           </div>
@@ -64,7 +66,7 @@ export default async function Post({ params: { id } }: Params) {
         </article>
 
         <aside className="w-full col-span-3 lg:col-span-1">
-          <div className="bg-gray-200 w-full rounded-lg p-5 sticky top-20">
+          <div className="bg-gray-200 w-full rounded-sm p-5 sticky top-20">
             <div>댓글1</div>
             <div>댓글2</div>
             <div>댓글3</div>
