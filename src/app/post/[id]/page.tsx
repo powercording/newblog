@@ -39,11 +39,11 @@ export default async function Post({ params: { id } }: Params) {
 
   return (
     <main className="min-h-screen">
-      <header className="mt-12 min-h-fit border-b-gray-400 border-b  bg-white">
+      <header className="mt-12 min-h-fit  bg-slate-800">
         <h1 className="block w-full 2xl:w-3/4 mx-auto p-5 text-2xl font-bold text-blue-600">
           {title}
         </h1>
-        <address className="block w-full 2xl:w-3/4 mx-auto p-5 text-gray-500">
+        <address className="block w-full 2xl:w-3/4 mx-auto p-5 text-gray-400">
           <p>{userName}</p>
           <div className="flex">
             <time>{dateFormatter(createdAt)}</time>

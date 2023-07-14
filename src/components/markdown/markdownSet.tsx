@@ -7,6 +7,8 @@ import { InferModel } from 'drizzle-orm';
 import { post } from '@/lib/PostSchema/schema';
 import postService from '@/app/service/PostService';
 import { getSession } from 'next-auth/react';
+import { BsPencil } from 'react-icons/bs';
+import { FiTool } from 'react-icons/fi';
 
 type MarkdownSet = {
   renderType: 'edit' | 'create';
@@ -45,8 +47,17 @@ export default function MarkdownSet({ markdown = emptyMarkdown, renderType }: Ma
   const {} = getSession();
 
   const handleMarkdownRegister = async () => {
-    if (!markdownContent || !markdonwTitle || !categories.length)
+    // if (!markdownContent || !markdonwTitle || !categories.length) {
+    //   return alert('제목과 내용을 입력해주세요');
+    // }
+    if (!markdownContent || !markdonwTitle) {
       return alert('제목과 내용을 입력해주세요');
+    }
+
+    const postInsertConfirm = confirm('작성하시겠습니까?');
+    if (!postInsertConfirm) {
+      return null;
+    }
 
     await postService.insertPost({
       content: markdownContent,
@@ -82,7 +93,7 @@ export default function MarkdownSet({ markdown = emptyMarkdown, renderType }: Ma
     setCategories(categories.filter(c => c !== category));
   };
 
-  const buttonOneText = renderType === 'create' ? '글쓰기' : '수정';
+  const buttonOneIcon = renderType === 'create' ? <BsPencil /> : <FiTool />;
   const buttonOneCallback = renderType === 'create' ? handleMarkdownRegister : handleMarkdownUpdate;
 
   const buttonTwoText = renderType === 'create' ? '임시' : '삭제';
@@ -90,18 +101,34 @@ export default function MarkdownSet({ markdown = emptyMarkdown, renderType }: Ma
 
   return (
     <main>
-      <section className="mt-12 min-h-fit border-b-gray-400 border-b w-full  px-5 relative bg-black">
-        <input
-          className="block py-3 text-2xl text-gray-200 focus:outline-none bg-transparent border-b border-blue-300 w-full mx-auto 2xl:w-3/4 pt-8"
-          placeholder="제목을 입력하세요"
-          type="text"
-          value={markdonwTitle ?? ''}
-          onChange={e => setMarkdownTitle(e.target.value)}
-        />
-        <section className="w-full 2xl:w-3/4 mx-auto py-2 flex text-gray-400">
+      <section className="mt-24 min-h-fit w-full">
+        <div className="px-5 w-full 2xl:w-3/4 mx-auto flex items-center">
+          <input
+            className="block p-3 text-2xl text-gray-200 focus:outline-none bg-transparent w-full"
+            placeholder="제목"
+            type="text"
+            value={markdonwTitle ?? ''}
+            onChange={e => setMarkdownTitle(e.target.value)}
+          />
+          <div className="absolute right-5 top-16 flex items-center gap-2">
+            <button
+              className="p-2 rounded-md hover:bg-blue-100 bg-white text-blue-700 w-fit h-9"
+              onClick={buttonOneCallback}
+            >
+              {buttonOneIcon}
+            </button>
+            <button
+              className="p-2 rounded-md hover:bg-blue-100 bg-white text-blue-700 w-fit h-9"
+              onClick={buttonTwoCallback}
+            >
+              {buttonTwoText}
+            </button>
+          </div>
+        </div>
+        <section className="w-full 2xl:w-3/4 mx-auto py-2 flex text-gray-400 px-5">
           <div className="relative">
             <select
-              className="rounded-md h-full bg-transparent pl-6 pr-16 border border-gray-300 focus:outline-none cursor-pointer"
+              className="rounded-md pl-6 pr-16 border border-slate-300 bg-slate-300 focus:outline-none cursor-pointer text-black"
               onChange={handleCategoryChange}
             >
               {categoryList.sort().map(category => (
@@ -112,10 +139,10 @@ export default function MarkdownSet({ markdown = emptyMarkdown, renderType }: Ma
             </select>
             <span className="absolute w-8 h-full bg-gray-500 right-0 rounded-r-md border-none pointer-events-none dropdown-span"></span>
           </div>
-          <div className="px-2 flex gap-2 items-center absolute top-36 md:static">
+          <div className="px-2 flex gap-2 items-center top-36 md:static">
             {categories?.map(category => (
               <span
-                className="h-fit bg-slate-300 w-24 rounded-full flex items-center justify-center text-white font-semibold cursor-pointer"
+                className="h-fit bg-slate-300 w-fit px-2 rounded-full flex items-center justify-center text-black font-semibold cursor-pointer"
                 key={category}
                 onClick={handleCategoryDelete}
               >
@@ -123,23 +150,9 @@ export default function MarkdownSet({ markdown = emptyMarkdown, renderType }: Ma
               </span>
             ))}
           </div>
-          <div className="flex text-gray-400 gap-4 ml-auto">
-            <button
-              className="ml-auto hover:shadow-md p-2 rounded-md font-semibold bg-white border border-gray-300 w-24"
-              onClick={buttonOneCallback}
-            >
-              {buttonOneText}
-            </button>
-            <button
-              className="ml-auto hover:shadow-md p-2 rounded-md font-semibold bg-white border border-gray-300 w-24"
-              onClick={buttonTwoCallback}
-            >
-              {buttonTwoText}
-            </button>
-          </div>
         </section>
       </section>
-      <section className="grid lg:grid-cols-2 min-h-screen h-auto w-full 2xl:w-3/4 mx-auto mt-4 px-5 gap-3 pb-4">
+      <section className="grid lg:grid-cols-2 min-h-screen h-auto w-full 2xl:w-3/4 mx-auto mt-4 px-5 pb-8 gap-3">
         <MarkdownEditor markdown={markdownContent} setMarkdown={setMarkdownContent} />
         <MarkdownViewer markdown={markdownContent} />
       </section>
