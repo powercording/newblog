@@ -36,6 +36,11 @@ const withLogInMenu: MenuListProps[] = [
     href: '/post/add',
     key: 'addPost',
   },
+  {
+    locationName: 'My Page',
+    href: '/mypage',
+    key: 'mypage',
+  },
   { locationName: 'Logout', href: undefined, key: 'logout' },
 ];
 
